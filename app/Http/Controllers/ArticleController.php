@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ArticleRequest;
 use Illuminate\Support\Facades\Validator;
 
@@ -47,23 +48,66 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
       
-        $validate = Validator::make($request->all(),
-        [
-            'titre'=>'required',
-            'contenu'=>'required'
-        ]);
+        // $validate = Validator::make($request->all(),
+        // [
+        //     'titre'=>'required',
+        //     'contenu'=>'required'
+        // ]);
 
-        if ($validate->fails()) {
-            return response()->json(
-                ['status'=> 422, 
-                'message'=>$validate->messages()],422);
-        } 
-        // $articles = new Article;
+        // if ($validate->fails()) {
+        //     return response()->json(
+        //         ['status'=> 422, 
+        //         'message'=>$validate->messages()],422);
+        // } else {
 
-        // $articles->titre = "je suis le titre";
-        // $articles->contenu = "je suis le contenu";
+           
+        //   var_dump($article = Article::create(
+        //         [
+        //             'titre'=>$request->titre,
+        //             'contenu'=>$request->contenu,
+        //             'user_id' =>Auth::user()->id
+        //         ]
+        //         ));
+            // if ($article) {
+            //     return response()->json(
+            //         [
+            //             'statut'=>200,
+            //             'message'=>'données enregistrés'
+            //         ], 200
+            //     );
+            // } else {
+            //     return response()->json(
+            //         [
+            //             'statut'=>500,
+            //             'errors'=>'erreurs'
+            //         ], 500
+            //     );
+            // }
+        
+        $this->validate($request,['titre'=>'required','contenu'=>'required']);
 
-        // $articles->save();
+        $articles = new Article;
+
+        $articles->titre = $request->titre;
+        $articles->contenu = $request->contenu;
+        $articles->user_id = Auth::user()->id;
+        $articles->save();
+
+        if ($articles) {
+                return response()->json(
+                    [
+                        'statut'=>200,
+                        'message'=>'données enregistrés'
+                    ], 200
+                );
+            } else {
+                return response()->json(
+                    [
+                        'statut'=>500,
+                        'errors'=>'erreurs'
+                    ], 500
+                );
+            }
     }
 
     /**

@@ -100,7 +100,6 @@ class UserController extends Controller
         if (Auth::attempt($data)) {
             $user = Auth::user();
             $token = $user->createToken('ma_cle_de_securite')->plainTextToken;
-
             return response()->json(['status'=>200,'message'=>'utilisateur connecté','token'=>$token]);
 
 
