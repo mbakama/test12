@@ -38,6 +38,6 @@ Route::delete('details/{id}/delete', [detailLicenceController::class,'destroy'])
 Route::get('articles',[ArticleController::class,'index']);
 Route::post('ajouter',[ArticleController::class,'store']);
 Route::get('articles/{article}',[ArticleController::class,'show']);
-Route::get('articles/edit/{article}',[ArticleController::class,'edit']);
+Route::get('articles/edit/{article}',[ArticleController::class,'edit'])->name('edit');
 Route::put('articles/edit/{article}',[ArticleController::class,'update']);
 Route::delete('articles/{article}',[ArticleController::class,'destroy']);
