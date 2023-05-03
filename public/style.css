@@ -1,0 +1,46 @@
+/* td a .fa.fa-pencil{
+    color:rgb(67, 153, 17);
+}
+td a .fas.fa-trash{
+    color:red;
+}
+td a .fas.fa-eye{
+    color:black;
+} */
+
+h2.text-center{
+    text-align: center;
+}
+div.table-responsive{
+    display: flex;
+    align-items: center;
+}
+td{
+    border: 1px solid;
+    padding: 5px;
+}
+td a{
+    border: none;
+    padding: 5px;
+    text-decoration: none;
+    color:white;
+    border-radius: 5px;
+    outline: none;
+    margin: 5px;
+}
+a.edit{
+    background-color: rgb(12, 219, 12);
+    
+}
+a.delete{
+    background-color: red;
+}
+a.voir{
+    background-color: rgb(222, 222, 217);
+    color:black;
+  
+}
+.card .card-body .card-text{
+    display: flex;
+    align-items: center;
+}
