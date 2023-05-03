@@ -138,7 +138,7 @@ class ArticleController extends Controller
      */
     public function destroy($article)
     {
-        $article = Article::find($article);
+        $article = Article::findOrFail($article);
         if ($article) {
                $article->delete();
                 return response()->json(
@@ -152,5 +152,14 @@ class ArticleController extends Controller
                         'message'=>'cet identifiant nexiste pas'
                         ],404);
                     }
+    }
+
+    public function restore($article)
+    {
+        $rest = Article::withTrashed()->find($article);
+
+        if ($rest && $rest->trashed()) {
+            $rest->restore();
+        }
     }
 }

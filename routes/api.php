@@ -41,3 +41,4 @@ Route::get('articles/{article}',[ArticleController::class,'show']);
 Route::get('articles/edit/{article}',[ArticleController::class,'edit'])->name('edit');
 Route::put('articles/edit/{article}',[ArticleController::class,'update']);
 Route::delete('articles/{article}',[ArticleController::class,'destroy']);
+Route::get('articles/restore/{article}',[ArticleController::class,'restore']);
