@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\detailLicenceController;
@@ -34,6 +35,9 @@ Route::get('details/{id}/edit',[detailLicenceController::class,'edit'])->name('e
 Route::put('details/{id}/edit',[detailLicenceController::class,'update']);
 Route::delete('details/{id}/delete', [detailLicenceController::class,'destroy']);
 
+//authentification 
+Route::post('register',[UserController::class,'store'])->name('store');
+Route::post('login', [UserController::class,'login'])->name('login');
 //example sur l'api avec auth
 Route::get('articles',[ArticleController::class,'index']);
 Route::post('ajouter',[ArticleController::class,'store']);
