@@ -18,20 +18,24 @@ class ArticleController extends Controller
     {
         $articles = DB::table('articles')->get();
 
-        if ($articles->count()>0) {
+        if ($articles->count() > 0) {
             return response()->json(
-                ['status'=>200,
-                 'articles'=>$articles
-            ],200
+                [
+                    'status' => 200,
+                    'articles' => $articles
+                ],
+                200
             );
         } else {
-           return response()->json(
-            ['status'=>442,
-            'message'=>'pas des données disponible pour le moment'
-           ],442
-           );
+            return response()->json(
+                [
+                    'status' => 442,
+                    'message' => 'pas des données disponible pour le moment'
+                ],
+                442
+            );
         }
-       
+
     }
 
     /**
@@ -47,7 +51,7 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-      
+
         // $validate = Validator::make($request->all(),
         // [
         //     'titre'=>'required',
@@ -60,7 +64,7 @@ class ArticleController extends Controller
         //         'message'=>$validate->messages()],422);
         // } else {
 
-           
+
         //   var_dump($article = Article::create(
         //         [
         //             'titre'=>$request->titre,
@@ -68,23 +72,23 @@ class ArticleController extends Controller
         //             'user_id' =>Auth::user()->id
         //         ]
         //         ));
-            // if ($article) {
-            //     return response()->json(
-            //         [
-            //             'statut'=>200,
-            //             'message'=>'données enregistrés'
-            //         ], 200
-            //     );
-            // } else {
-            //     return response()->json(
-            //         [
-            //             'statut'=>500,
-            //             'errors'=>'erreurs'
-            //         ], 500
-            //     );
-            // }
-        
-        $this->validate($request,['titre'=>'required','contenu'=>'required']);
+        // if ($article) {
+        //     return response()->json(
+        //         [
+        //             'statut'=>200,
+        //             'message'=>'données enregistrés'
+        //         ], 200
+        //     );
+        // } else {
+        //     return response()->json(
+        //         [
+        //             'statut'=>500,
+        //             'errors'=>'erreurs'
+        //         ], 500
+        //     );
+        // }
+
+        $this->validate($request, ['titre' => 'required', 'contenu' => 'required']);
 
         $articles = new Article;
 
@@ -94,20 +98,22 @@ class ArticleController extends Controller
         $articles->save();
 
         if ($articles) {
-                return response()->json(
-                    [
-                        'statut'=>200,
-                        'message'=>'données enregistrés'
-                    ], 200
-                );
-            } else {
-                return response()->json(
-                    [
-                        'statut'=>500,
-                        'errors'=>'erreurs'
-                    ], 500
-                );
-            }
+            return response()->json(
+                [
+                    'statut' => 200,
+                    'message' => 'données enregistrés'
+                ],
+                200
+            );
+        } else {
+            return response()->json(
+                [
+                    'statut' => 500,
+                    'errors' => 'erreurs'
+                ],
+                500
+            );
+        }
     }
 
     /**
@@ -115,31 +121,40 @@ class ArticleController extends Controller
      */
     public function show($article)
     {
-     //ici on recupere l'id de l'article a partir de la methode find
-            $article = Article::find($article);
+        //ici on recupere l'id de l'article a partir de la methode find
+        $article = Article::find($article);
         //avec ce bout de code on verifie si la cle etrangere user_id se trouva dans la table article est egale a l'id du user connecte
-            if ($article->user_id==Auth::user()->id) {
-                //si oui on revoi la reponse avec les informations correspondantes
-                if ($article) {
-                    return response()->json(
-                        ['status' => 200,
-                        'article'=>$article
-                        ],200); 
-                    } else {
-                            //si on affiche le message d'erreur dans le cas ou l'id demande nexiste pas
-                        return response()->json(
-                            ['status' => 404,
-                            'message'=>'cet identifiant nexiste pas'
-                            ],404);
-                        }
-            } else {
-                //sinon on affiche le message d'avetissement pour indiquer que le user ne pas connecter
+        if ($article->user_id == Auth::user()->id) {
+            //si oui on revoi la reponse avec les informations correspondantes
+            if ($article) {
                 return response()->json(
-                    ['status' => 404,
-                    'message'=>'tu ne peux pas voir cet article car tu nas pas lautorisation'
-                    ],404);
-                }
-        
+                    [
+                        'status' => 200,
+                        'article' => $article
+                    ],
+                    200
+                );
+            } else {
+                //si on affiche le message d'erreur dans le cas ou l'id demande nexiste pas
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'cet identifiant nexiste pas'
+                    ],
+                    404
+                );
+            }
+        } else {
+            //sinon on affiche le message d'avetissement pour indiquer que le user ne pas connecter
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'tu ne peux pas voir cet article car tu nas pas lautorisation'
+                ],
+                404
+            );
+        }
+
     }
 
     /**
@@ -148,21 +163,27 @@ class ArticleController extends Controller
     public function edit($article)
     {
         $article = Article::find($article);
-        if ($article->user_id==Auth::user()->id) {
+        if ($article->user_id == Auth::user()->id) {
             if ($article) {
                 return response()->json(
-                    ['status' => 200,
-                    'article'=>$article
-                    ],200); 
-                } else {
-                        
-                    return response()->json(
-                        ['status' => 404,
-                        'message'=>'cet identifiant nexiste pas'
-                        ],404);
-                    }
+                    [
+                        'status' => 200,
+                        'article' => $article
+                    ],
+                    200
+                );
+            } else {
+
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'cet identifiant nexiste pas'
+                    ],
+                    404
+                );
+            }
         }
-        
+
     }
 
     /**
@@ -170,21 +191,23 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        
-        $this->validate($request,['titre'=>'required','contenu'=>'required']);
-     if ($article->user_id==Auth::user()->id) {
-        var_dump('vvvv');
-     }
-        $article-> titre = $request->titre;
-        $article->contenu = $request->contenu;
-        $article->user_id = Auth::user()->id;
-        $article->update();
 
-        if ($article) {
-            return response()->json(['status'=>200,'message'=>'données modifiés'],200);
+        $this->validate($request, ['titre' => 'required', 'contenu' => 'required']);
+        if ($article->user_id == Auth::user()->id) {
+            $article->titre = $request->titre;
+            $article->contenu = $request->contenu;
+            $article->user_id = Auth::user()->id;
+            $article->update();
+
+            if ($article) {
+                return response()->json(['status' => 200, 'message' => 'données modifiés'], 200);
+            } else {
+                return response()->json(['status' => 404, 'message' => 'erreurs'], 404);
+            }
         } else {
-            return response()->json(['status'=>404,'message'=>'erreurs'],404);
+            return response()->json(['status' => 404, 'message' => 'vous netez pas autorisé a modifé cet article']);
         }
+
     }
 
     /**
@@ -194,18 +217,24 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($article);
         if ($article) {
-               $article->delete();
-                return response()->json(
-                    ['status' => 200,
-                    'article'=>'données supprimée avec success'
-                    ],200); 
-                } else {
-                        
-                    return response()->json(
-                        ['status' => 404,
-                        'message'=>'cet identifiant nexiste pas'
-                        ],404);
-                    }
+            $article->delete();
+            return response()->json(
+                [
+                    'status' => 200,
+                    'article' => 'données supprimée avec success'
+                ],
+                200
+            );
+        } else {
+
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'cet identifiant nexiste pas'
+                ],
+                404
+            );
+        }
     }
 
     public function restore($article)

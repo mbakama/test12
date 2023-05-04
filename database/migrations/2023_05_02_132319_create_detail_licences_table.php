@@ -22,6 +22,8 @@ return new class extends Migration
             $table->float('prixUnit');
             $table->char('unitStat');
             $table->datetime('DateSaisie');
+            $table->foreignId('user_id')->constrained();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
