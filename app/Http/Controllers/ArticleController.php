@@ -115,21 +115,30 @@ class ArticleController extends Controller
      */
     public function show($article)
     {
-      
+     //ici on recupere l'id de l'article a partir de la methode find
             $article = Article::find($article);
-            if ($article) {
+        //avec ce bout de code on verifie si la cle etrangere user_id se trouva dans la table article est egale a l'id du user connecte
+            if ($article->user_id==Auth::user()->id) {
+                //si oui on revoi la reponse avec les informations correspondantes
+                if ($article) {
                     return response()->json(
                         ['status' => 200,
                         'article'=>$article
                         ],200); 
                     } else {
-                            
+                            //si on affiche le message d'erreur dans le cas ou l'id demande nexiste pas
                         return response()->json(
                             ['status' => 404,
                             'message'=>'cet identifiant nexiste pas'
                             ],404);
                         }
-       
+            } else {
+                //sinon on affiche le message d'avetissement pour indiquer que le user ne pas connecter
+                return response()->json(
+                    ['status' => 404,
+                    'message'=>'tu ne peux pas voir cet article car tu nas pas lautorisation'
+                    ],404);
+                }
         
     }
 
@@ -139,7 +148,8 @@ class ArticleController extends Controller
     public function edit($article)
     {
         $article = Article::find($article);
-        if ($article) {
+        if ($article->user_id==Auth::user()->id) {
+            if ($article) {
                 return response()->json(
                     ['status' => 200,
                     'article'=>$article
@@ -151,6 +161,8 @@ class ArticleController extends Controller
                         'message'=>'cet identifiant nexiste pas'
                         ],404);
                     }
+        }
+        
     }
 
     /**
@@ -158,22 +170,20 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        $valeurs = Validator::make($request->all(),
-        ['titre'=>'required','contenu'=>'required']);
+        
+        $this->validate($request,['titre'=>'required','contenu'=>'required']);
+     if ($article->user_id==Auth::user()->id) {
+        var_dump('vvvv');
+     }
+        $article-> titre = $request->titre;
+        $article->contenu = $request->contenu;
+        $article->user_id = Auth::user()->id;
+        $article->update();
 
-        if ($valeurs->fails()) {
-            return response()->json(['status'=>402, 'message'=>$valeurs->messages()], 402);
+        if ($article) {
+            return response()->json(['status'=>200,'message'=>'données modifiés'],200);
         } else {
-            try {
-                $article->update(['titre'=>$request->titre,'contenu'=>$request->contenu]);
-
-                return response()->json(['status'=>200, 'message'=>'données modifiées'], 200);
-            } catch (Exception $e){
-                return response()->json(['status'=>501, 'message'=>'erreurs'], 501);
-            }
-       
-                 
-           
+            return response()->json(['status'=>404,'message'=>'erreurs'],404);
         }
     }
 

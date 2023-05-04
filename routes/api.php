@@ -44,11 +44,12 @@ Route::get('articles',[ArticleController::class,'index']);
 Route::middleware('auth:sanctum')->group(function () {
     
     Route::post('ajouter',[ArticleController::class,'store'])->name('store');
-    Route::get('articles/{article}',[ArticleController::class,'show']);
-    Route::get('articles/edit/{article}',[ArticleController::class,'edit'])->name('edit');
-    Route::put('articles/edit/{article}',[ArticleController::class,'update']);
-    Route::delete('articles/{article}',[ArticleController::class,'destroy']);
-    Route::get('articles/restore/{article}',[ArticleController::class,'restore']);
+    Route::get('article/{article}',[ArticleController::class,'show']);
+    // Route::get('article/edit/{article}',[ArticleController::class,'edit'])->name('edit');
+    Route::put('article/edit/{article}',[ArticleController::class,'update']);
+    Route::delete('article/{article}',[ArticleController::class,'destroy']);
+    Route::get('article/restore/{article}',[ArticleController::class,'restore']);
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
