@@ -44,6 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
     //travail donné hier sur les details de douanes
     Route::post('detail', [detailLicenceController::class, 'store']);
     // Route::get('details/{id}/edit',[detailLicenceController::class,'edit'])->name('edit');
+    Route::get('detail/restore', [detailLicenceController::class, 'restores']);
+    Route::get('detail/restore/{id}', [detailLicenceController::class, 'restore']);
     Route::put('detail/edit/{id}', [detailLicenceController::class, 'update']);
     Route::delete('detail/delete/{id}', [detailLicenceController::class, 'destroy']);
 

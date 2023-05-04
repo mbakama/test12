@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\softDeletes;
 
 class DetailLicence extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $fillable = [
         'CodeDetailLicence',
