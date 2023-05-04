@@ -27,7 +27,7 @@ use App\Http\Controllers\detailLicenceController;
 
 
 Route::get('details', [detailLicenceController::class, 'index']);
-Route::get('detail/{id}', [detailLicenceController::class, 'show'])->name('show');
+Route::get('detail/{detail}', [detailLicenceController::class, 'show'])->name('show');
 
 //authentification 
 Route::post('register', [UserController::class, 'store'])->name('store');
@@ -43,10 +43,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //travail donné hier sur les details de douanes
     Route::post('detail', [detailLicenceController::class, 'store']);
-
     // Route::get('details/{id}/edit',[detailLicenceController::class,'edit'])->name('edit');
-    Route::put('detail/{id}/edit', [detailLicenceController::class, 'update']);
-    Route::delete('detail/{id}/delete', [detailLicenceController::class, 'destroy']);
+    Route::put('detail/edit/{id}', [detailLicenceController::class, 'update']);
+    Route::delete('detail/delete/{id}', [detailLicenceController::class, 'destroy']);
 
     // Route::post('ajouter',[ArticleController::class,'store'])->name('store');
     // Route::get('article/{article}',[ArticleController::class,'show']);

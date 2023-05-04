@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DetailLicence;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -69,7 +70,7 @@ class detailLicenceController extends Controller
             ],442
         );
         } else {
-            $insert = DetailLicence::create(
+            $insert = DB::table('detail_licences')->insert(
                 ['CodeDetailLicence'=> $request->CodeDetailLicence,
                 'serie'=>$request->serie,
                 'codeDouane'=>$request->codeDouane,
@@ -78,7 +79,9 @@ class detailLicenceController extends Controller
                 'codeDevice'=>$request->codeDevice,
                 'prixUnit'=>$request->prixUnit,
                 'unitStat'=>$request->unitStat,
-                'DateSaisie'=>$request->DateSaisie]
+                'DateSaisie'=>$request->DateSaisie,
+                'user_id' => Auth::user()->id
+                ]
             );
 
             if ($insert) {
@@ -99,30 +102,27 @@ class detailLicenceController extends Controller
     
         }
 
-     
-       
-
-
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show($detail)
     {
-        $detail = DetailLicence::find($id);
-
-        if (  $detail ) {
-            return response()->json([
-                'statut'=>200,
-                'detail'=> $detail 
-            ],200);
-        } else {
-            return response()->json([
-                'statut'=>404,
-                'message'=> 'cette id nexiste pas car il a ete effacé' 
-            ],404);
-        }
+        $details = DetailLicence::find($detail);
+       
+            if (  $details ) {
+                return response()->json([
+                    'statut'=>200,
+                    'detail'=> $details 
+                ],200);
+            } else {
+                return response()->json([
+                    'statut'=>404,
+                    'message'=> 'cette id nexiste pas ou a ete effacé' 
+                ],404);
+            }
+        
     }
 
     /**
@@ -131,7 +131,9 @@ class detailLicenceController extends Controller
     public function edit(int $id)
     {
         $detail = DetailLicence::find($id);
-
+        if ($detail->user_id == Auth::user()->id) {
+             var_dump($detail);
+        }
         if (  $detail ) {
             return response()->json([
                 'statut'=>200,
@@ -174,22 +176,54 @@ class detailLicenceController extends Controller
         );
         } else {
             $update = DetailLicence::find($id);
-            if ($update) {
-                $update ->update(
-                    ['CodeDetailLicence'=> $request->CodeDetailLicence,
-                    'serie'=>$request->serie,
-                    'codeDouane'=>$request->codeDouane,
-                    'codePaysOrg'=>$request->codePaysOrg,
-                    'quantite'=>$request->quantite,
-                    'codeDevice'=>$request->codeDevice,
-                    'prixUnit'=>$request->prixUnit,
-                    'unitStat'=>$request->unitStat,
-                    'DateSaisie'=>$request->DateSaisie]
-                );
+            if ($update->user_id == Auth::user()->id) {
+                if ($update) {
+                    $update ->update(
+                        ['CodeDetailLicence'=> $request->CodeDetailLicence,
+                        'serie'=>$request->serie,
+                        'codeDouane'=>$request->codeDouane,
+                        'codePaysOrg'=>$request->codePaysOrg,
+                        'quantite'=>$request->quantite,
+                        'codeDevice'=>$request->codeDevice,
+                        'prixUnit'=>$request->prixUnit,
+                        'unitStat'=>$request->unitStat,
+                        'DateSaisie'=>$request->DateSaisie]
+                    );
+                    return response()->json(
+                        [
+                            'status'=>200,
+                            'message' => 'données modifiées avec success'
+                        ],200
+                    );
+                }
+                else {
+                    return response()->json(
+                        [
+                            'status'=>500,
+                            'message' => 'verifiez vos codes'
+                        ],500
+                    );
+                }
+            }
+            
+    
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(int $delete)
+    {
+        $detail = DetailLicence::find($delete);
+        if ($detail->user_id = Auth::user()->id) {
+            if ($detail) {
+                $detail->delete();
+    
                 return response()->json(
                     [
                         'status'=>200,
-                        'message' => 'données modifiées avec success'
+                        'message' => 'donnée suppriméé avec success'
                     ],200
                 );
             }
@@ -201,34 +235,10 @@ class detailLicenceController extends Controller
                     ],500
                 );
             }
-    
+        } else {
+            return response()->json($data, 200, $headers);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $delete)
-    {
-        $detail = DetailLicence::find($delete);
-        if ($detail) {
-            $detail->delete();
-
-            return response()->json(
-                [
-                    'status'=>200,
-                    'message' => 'donnée suppriméé avec success'
-                ],200
-            );
-        }
-        else {
-            return response()->json(
-                [
-                    'status'=>500,
-                    'message' => 'verifiez vos codes'
-                ],500
-            );
-        }
+        
 
 
         
