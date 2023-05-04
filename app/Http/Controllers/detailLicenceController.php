@@ -42,10 +42,7 @@ class detailLicenceController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+  
 
     /**
      * Store a newly created resource in storage.
@@ -129,7 +126,7 @@ class detailLicenceController extends Controller
         } else {
             return response()->json([
                 'statut' => 404,
-                'message' => 'cet id nexiste pas ou a ete effacé'
+                'message' => 'cet id n\'existe pas ou a ete effacé'
             ], 404);
         }
 
@@ -138,24 +135,6 @@ class detailLicenceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
-    {
-        $detail = DetailLicence::find($id);
-        if ($detail->user_id == Auth::user()->id) {
-            var_dump($detail);
-        }
-        if ($detail) {
-            return response()->json([
-                'statut' => 200,
-                'detail' => $detail
-            ], 200);
-        } else {
-            return response()->json([
-                'statut' => 404,
-                'message' => 'aucune donnée trouvé pour cette id'
-            ], 404);
-        }
-    }
 
     /**
      * Update the specified resource in storage.
@@ -176,7 +155,6 @@ class detailLicenceController extends Controller
                 'unitStat' => 'required',
                 'DateSaisie' => 'required'
             ]
-
         );
 
         if ($detail->fails()) {
@@ -222,11 +200,8 @@ class detailLicenceController extends Controller
                         500
                     );
                 }
-
-
-
             } else {
-                return response()->json(['stutus' => 404, 'message' => 'cet id n\'existe pas']);
+                return response()->json(['stutus' => 404, 'message' => 'cet id n\'existe pas'],404);
             }
         }
     }
@@ -277,7 +252,22 @@ class detailLicenceController extends Controller
         if ($restore && $restore->trashed()) {
             $restore->restore();
 
-            return response()->json(['status' => 200, 'message' => 'felicitation vous avez restoré un enregistrement'], 200);
+            return response()->json([
+                'status' => 200,
+                'message' =>
+                'felicitation vous avez restoré un enregistrement'
+            ], 200);
+        } else {
+            if (isset($restore->id)) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'cette donnée a été déja restorée'
+                ], 200);
+            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'cet id n\'existe pas'
+            ], 200);
         }
     }
     /**
@@ -292,9 +282,19 @@ class detailLicenceController extends Controller
         $restores->restore();
 
         if ($restores) {
-            return response()->json(['status' => 200, 'message' => 'toutes les données supprimés ont été restorées'], 200);
+            return response()->json([
+                'status' => 200,
+                'message' => 'toutes les données supprimés ont été restorées'
+            ], 200);
         } else {
-            return response()->json(['status' => 400, 'message' => 'rien a restoré'], 400);
+
+            return response()->json(
+                [
+                    'status' => 400,
+                    'message' => 'rien a restoré'
+                ],
+                400
+            );
         }
 
     }

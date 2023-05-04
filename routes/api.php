@@ -35,7 +35,7 @@ Route::post('login', [UserController::class, 'login'])->name('login');
 
 
 //example sur l'api avec auth
-Route::get('articles', [ArticleController::class, 'index']);
+// Route::get('articles', [ArticleController::class, 'index']);
 
 
 
