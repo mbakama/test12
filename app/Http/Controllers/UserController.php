@@ -40,7 +40,7 @@ class UserController extends Controller
         if ($data->fails()) {
             return response()->json([
                 'status' =>442,
-                'message'=>$detail->messages()
+                'message'=>$data->messages()
             ],442
         );
         } else {
