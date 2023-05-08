@@ -43,11 +43,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //travail donné hier sur les details de douanes
     Route::post('detail', [detailLicenceController::class, 'store']);
-    // Route::get('details/{id}/edit',[detailLicenceController::class,'edit'])->name('edit');
+    // Route::get('detail/{id}/edit',[detailLicenceController::class,'edit'])->name('edit');
     Route::get('detail/restore', [detailLicenceController::class, 'restores']);
     Route::get('detail/restore/{id}', [detailLicenceController::class, 'restore']);
     Route::put('detail/edit/{id}', [detailLicenceController::class, 'update']);
-    Route::delete('detail/delete/{id}', [detailLicenceController::class, 'destroy']);
+    Route::delete('detail/{id}', [detailLicenceController::class, 'destroy']);
 
     // Route::post('ajouter',[ArticleController::class,'store'])->name('store');
     // Route::get('article/{article}',[ArticleController::class,'show']);

@@ -50,6 +50,7 @@ class detailLicenceController extends Controller
     public function store(Request $request)
     {
         $detail = Validator::make(
+           //
             $request->all(),
             [
                 'CodeDetailLicence' => 'required',
@@ -61,10 +62,9 @@ class detailLicenceController extends Controller
                 'prixUnit' => 'required',
                 'unitStat' => 'required',
                 'DateSaisie' => 'required'
-            ]
-
-        );
-
+            ],
+            ['eur']
+        ); 
         if ($detail->fails()) {
             return response()->json(
                 [
@@ -93,7 +93,7 @@ class detailLicenceController extends Controller
                 return response()->json(
                     [
                         'status' => 200,
-                        'message' => 'données enregistrées avec success'
+                        'message' => 'Vos Données sont enregistrées avec success'
                     ],
                     200
                 );
@@ -126,7 +126,7 @@ class detailLicenceController extends Controller
         } else {
             return response()->json([
                 'statut' => 404,
-                'message' => 'cet id n\'existe pas ou a ete effacé'
+                'message' => 'cet id n\'existe pas ou a été effacé'
             ], 404);
         }
 
@@ -187,7 +187,7 @@ class detailLicenceController extends Controller
                     return response()->json(
                         [
                             'status' => 200,
-                            'message' => 'données modifiées avec success'
+                            'message' => 'Vos données ont été modifiées avec success'
                         ],
                         200
                     );
@@ -236,15 +236,19 @@ class detailLicenceController extends Controller
         } else {
             return response()->json(
                 [
-                    'status' => 500,
-                    'message' => 'cet id n\'existe pas
-                '
+                    'status' => 404,
+                    'message' => 'cet id n\'existe pas'
                 ],
-                500
+                404
             );
         }
     }
 
+    /**
+     * Summary of restore
+     * @param mixed $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function restore($id)
     {
         // ce bout de code nous permet de restorer les données supprimées referencié par un id
@@ -260,14 +264,14 @@ class detailLicenceController extends Controller
         } else {
             if (isset($restore->id)) {
                 return response()->json([
-                    'status' => 200,
+                    'status' => 500,
                     'message' => 'cette donnée a été déja restorée'
-                ], 200);
+                ], 500);
             }
             return response()->json([
-                'status' => 200,
+                'status' => 404,
                 'message' => 'cet id n\'existe pas'
-            ], 200);
+            ], 404);
         }
     }
     /**
@@ -290,10 +294,10 @@ class detailLicenceController extends Controller
 
             return response()->json(
                 [
-                    'status' => 400,
+                    'status' => 404,
                     'message' => 'rien a restoré'
                 ],
-                400
+                404
             );
         }
 
