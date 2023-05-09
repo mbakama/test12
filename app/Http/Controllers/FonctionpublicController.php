@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetailFPI;
+use App\Models\Fonctionpublic;
 use Illuminate\Http\Request;
 
-class DetailFPIController extends Controller
+class FonctionpublicController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class DetailFPIController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DetailFPI $detailFPI)
+    public function show(Fonctionpublic $fonctionpublic)
     {
         //
     }
@@ -42,7 +42,7 @@ class DetailFPIController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DetailFPI $detailFPI)
+    public function edit(Fonctionpublic $fonctionpublic)
     {
         //
     }
@@ -50,7 +50,7 @@ class DetailFPIController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, DetailFPI $detailFPI)
+    public function update(Request $request, Fonctionpublic $fonctionpublic)
     {
         //
     }
@@ -58,7 +58,7 @@ class DetailFPIController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DetailFPI $detailFPI)
+    public function destroy(Fonctionpublic $fonctionpublic)
     {
         //
     }

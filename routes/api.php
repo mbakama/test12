@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DetailfpController;
+use App\Http\Controllers\DetailFPIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -27,7 +29,10 @@ use App\Http\Controllers\detailLicenceController;
 
 
 Route::get('details', [detailLicenceController::class, 'index']);
-Route::get('detail/{detail}', [detailLicenceController::class, 'show'])->name('show');
+Route::get('detail/{detail}', [detailLicenceController::class, 'show'])->name('show'); 
+
+Route::get('detailfps', [DetailfpController::class,'index']);
+Route::get('detailfp/{detailfp}', [DetailfpController::class,'show']);
 
 //authentification 
 Route::post('register', [UserController::class, 'store'])->name('store');
@@ -48,6 +53,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('detail/restore/{id}', [detailLicenceController::class, 'restore']);
     Route::put('detail/edit/{id}', [detailLicenceController::class, 'update']);
     Route::delete('detail/{id}', [detailLicenceController::class, 'destroy']);
+
+    // donnees provenant dans la table fpi
+    Route::post('detailfp',[ DetailfpController::class,'store']);
+    Route::put('detailfp/{detailfp}',[DetailfpController::class,'update']);
+    Route::delete('detailfp/{detailfp}',[DetailfpController::class,'destroy']); 
+    Route::get('detailfps/restorer', [DetailfpController::class, 'restorerAll']);
+    Route::get('detailfp/restore/{detailfp}', [DetailfpController::class, 'restorer']);
 
     // Route::post('ajouter',[ArticleController::class,'store'])->name('store');
     // Route::get('article/{article}',[ArticleController::class,'show']);

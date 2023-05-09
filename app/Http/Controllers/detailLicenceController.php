@@ -63,7 +63,7 @@ class detailLicenceController extends Controller
                 'unitStat' => 'required',
                 'DateSaisie' => 'required'
             ],
-            ['eur']
+         
         ); 
         if ($detail->fails()) {
             return response()->json(

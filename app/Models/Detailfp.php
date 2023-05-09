@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-class DetailFPI extends Model
+class Detailfp extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ['numero',
 'CodeSource',
@@ -17,8 +17,10 @@ class DetailFPI extends Model
 'Promoteur',
 'AdressPromoteur',
 'observation',
+'telephone',
 'Annee',
 'CoNum',
 'DateCreation',
 'Status'];
+
 }
