@@ -13,6 +13,25 @@ return new class extends Migration
     {
         Schema::create('fonctionpublics', function (Blueprint $table) {
             $table->id();
+            $table->string('NumMinTravail');
+            $table->string('Num');
+            $table->string('NomExpatrier');
+            $table->string('LieuNais');
+            $table->string('DateNais');
+            $table->string('DateProgr');
+            $table->integer('CodePays');
+            $table->string('Fonction');
+            $table->string('AdresseAffectation');
+            $table->string('Obervation');
+            $table->integer('NbreRenouvellement')->nullable();
+            $table->integer('NbreNationaux');	
+            $table->integer('NbreExpatrie');
+            $table->string('Annee');
+            $table->integer('CodeMois');
+            $table->string('DateCreation');
+            $table->string('CoNum');
+            $table->integer('Status'); 
+            $table->softDeletes();
             $table->timestamps();
         });
     }
