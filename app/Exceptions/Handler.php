@@ -32,7 +32,7 @@ class Handler extends ExceptionHandler
             if ($request->is("api/*")) {
                 return response()->json(
                     [
-                        "message"=>"ressource introuvable"
+                        "message"=>"les informations que vous voulez acceder sont introuvables"
                     ],404
                 );
             }

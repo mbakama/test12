@@ -7,10 +7,7 @@ use App\Models\DetailLicence;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Node\Expr\Isset_;
-
-
-class detailLicenceController extends Controller
+ class detailLicenceController extends Controller
 {
     /**
      * Display a listing of the resource.

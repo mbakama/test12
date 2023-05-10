@@ -22,18 +22,18 @@ class DetailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'numero' => 'required',
-            'CodeSource' => '',
-            'MontantCreditFc' => 'required',
-            'MontantCreditUSD' => 'required',
-            'Promoteur' => '',
-            'AdressPromoteur' => '',
-            'observation' => '',
-            'telephone' => '',
-            'Annee' => 'required',
-            'CoNum' => 'required',
-            'DateCreation' => 'required',
-            'Status' => 'required'
+            'numero' =>'required',
+            'CodeSource'=>'',
+            'MontantCreditFc'=>'required',
+            'MontantCreditUSD'=>'required',
+            'Promoteur' =>'',
+            'AdressPromoteur'=>'',
+            'observation'=>'',
+            'telephone'=>'',
+            'Annee'=>'nullable',
+            'CoNum'=>'required',
+            'DateCreation'=>'required',
+            'Status'=>'required'
         ];
     }
 }

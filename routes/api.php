@@ -3,6 +3,7 @@
 use App\Http\Controllers\DetailfpController;
 use App\Http\Controllers\DetailFPIController;
 use App\Http\Controllers\FonctionpublicController;
+use App\Http\Controllers\FpiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -33,8 +34,10 @@ Route::get('details', [detailLicenceController::class, 'index']);
 Route::get('detail/{detail}', [detailLicenceController::class, 'show'])->name('show'); 
 
 // FPI
-Route::get('detailfps', [DetailfpController::class,'index']);
-Route::get('detailfp/{detailfp}', [DetailfpController::class,'show']);
+Route::get('detailfpis', [FpiController::class,'index']);
+Route::get('detailfpi/{id}', [FpiController::class,'show']);
+
+Route::delete('detailfpi/{id}', [FpiController::class,'destroy']);
 
 // Ministere du travail
 ROute::get('fonctions',[FonctionpublicController::class,'index']);
@@ -52,22 +55,21 @@ Route::post('login', [UserController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function () {
 
     //travail donné hier sur les details de douanes
-    Route::post('detail', [detailLicenceController::class, 'store']);
-    // Route::get('detail/{id}/edit',[detailLicenceController::class,'edit'])->name('edit');
+    Route::post('detail', [detailLicenceController::class, 'store']); 
     Route::get('detail/restore', [detailLicenceController::class, 'restores']);
     Route::get('detail/restore/{id}', [detailLicenceController::class, 'restore']);
     Route::put('detail/edit/{id}', [detailLicenceController::class, 'update']);
     Route::delete('detail/{id}', [detailLicenceController::class, 'destroy']);
 
-    // donnees provenant dans la table FPI
-    Route::post('detailfp',[ DetailfpController::class,'store']);
+    // donnees provenant de la table FPI
+    // Route::post('detailfp',[ DetailfpController::class,'store']);
+    Route::post('detailfpi',[FpiController::class,'store']);
     Route::put('detailfp/{detailfp}',[DetailfpController::class,'update']);
     Route::delete('detailfp/{detailfp}',[DetailfpController::class,'destroy']); 
     Route::get('detailfps/restorer', [DetailfpController::class, 'restorerAll']);
     Route::get('detailfp/restore/{detailfp}', [DetailfpController::class, 'restorer']);
 
-    //donnees du ministere du travail
-    
+    //donnees du ministere du travail 
     Route::post('fonction',[FonctionpublicController::class,'store']);
     Route::put('fonction/{id}',[FonctionpublicController::class,'update']);
     Route::delete('fonction/{id}',[FonctionpublicController::class,'destroy']);
