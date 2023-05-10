@@ -67,11 +67,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('detailfp/restore/{detailfp}', [DetailfpController::class, 'restorer']);
 
     //donnees du ministere du travail
+    
     Route::post('fonction',[FonctionpublicController::class,'store']);
     Route::put('fonction/{id}',[FonctionpublicController::class,'update']);
-    Route::detete('fonction/{id}',[FonctionpublicController::class,'destroy']);
-    Route::get('fonctions/restorer', [DetailfpController::class, 'restorerAll']);
-    Route::get('fonction/restore/{id}', [DetailfpController::class, 'restorer']);
+    Route::delete('fonction/{id}',[FonctionpublicController::class,'destroy']);
+    Route::get('fonctions/restorer', [FonctionpublicController::class, 'restorerAll']);
+    Route::get('fonction/restore/{id}', [FonctionpublicController::class, 'restorer']);
 
     // Route::post('ajouter',[ArticleController::class,'store'])->name('store');
     // Route::get('article/{article}',[ArticleController::class,'show']);

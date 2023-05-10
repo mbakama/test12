@@ -160,16 +160,161 @@ class FonctionpublicController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Fonctionpublic $fonctionpublic)
+    public function update(Request $request, $id)
     {
-        //
+        $updates = Validator::make(
+            //
+             $request->all(),
+             [
+                 "NumMinTravail"=>'required',
+                 "Num"=>'required',
+                 "NomExpatrier"=>'required',
+                 "LieuNais"=>'required',
+                 "DateNais"=>'required',
+                 "DateProgr"=>'required',
+                 "CodePays"=>'required',
+                 "Fonction"=>'required',
+                 "AdresseAffectation"=>'required',
+                 "Obervation"=>'required',
+                 "NbreRenouvellement"=>'',
+                 "NbreNationaux"=>'required',
+                 "NbreExpatrie"=>'required',
+                 "Annee"=>'required',
+                 "CodeMois"=>'required',
+                 "DateCreation"=>'required',
+                 "CoNum"=>'required',
+                 "Status"=>'required'
+             ],
+          
+         ); 
+         if ($updates->fails()) {
+             return response()->json(
+                 [
+                     'status' => 442,
+                     'message' => $updates->messages()
+                 ],
+                 442
+             );
+         } else { 
+
+             $update = Fonctionpublic::find($id)->update(
+                 [
+                     "NumMinTravail"=>$request->NumMinTravail,
+                     "Num"=>$request->Num,
+                     "NomExpatrier"=>$request->NomExpatrier,
+                     "LieuNais"=>$request->LieuNais,
+                     "DateNais"=>$request->DateNais,
+                     "DateProgr"=>$request->DateProgr,
+                     "CodePays"=>$request->CodePays,
+                     "Fonction"=>$request->Fonction,
+                     "AdresseAffectation"=>$request->AdresseAffectation,
+                     "Obervation"=>$request->Obervation,
+                     "NbreRenouvellement"=>$request->NbreRenouvellement,
+                     "NbreNationaux"=>$request->NbreNationaux,
+                     "NbreExpatrie"=>$request->NbreExpatrie,
+                     "Annee"=>$request->Annee,
+                     "CodeMois"=>$request->CodeMois,
+                     "DateCreation"=>$request->DateCreation,
+                     "CoNum"=>$request->CoNum,
+                     "Status"=>$request->Status
+                 ]
+             );
+ 
+             if ($update) {
+                 return response()->json(
+                     [
+                         'status' => 200,
+                         'message' => 'Vos Données sont enregistrées avec success'
+                     ],
+                     200
+                 );
+             } else {
+                 return response()->json(
+                     [
+                         'status' => 500,
+                         'message' => 'verifiez vos codes'
+                     ],
+                     500
+                 );
+             }
+ 
+         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Fonctionpublic $fonctionpublic)
+    public function destroy($id)
     {
-        //
+        $delete = Fonctionpublic::find($id);
+
+       if ($delete) {
+        $delete->delete();
+        return response()->json(
+            [
+                'status' =>200,
+                'message'=>'vous avez supprimeé une donnee avec success'
+            ],200
+        );
+       } else {
+        return response()->json(
+            [
+                'status' =>404,
+                'message'=>'cet id nexiste pas'
+            ],404
+        );
+       }
+       
+
+        
+    }
+    public function restorer($id)
+    {
+        $data = Fonctionpublic::withTrashed()->find($id);
+
+        if ($data && $data->trashed()) {
+             $data->restore();
+
+              return response()->json([
+                'status' => 200,
+                'message' =>
+                'felicitation vous avez restoré un enregistrement'
+            ], 200);
+        } else {
+             if (isset($data->id)) {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'cette donnée a été déja restorée'
+                ], 500);
+            } else {
+                 return response()->json([
+                'status' => 404,
+                'message' => 'cet id n\'existe pas'
+            ], 404);
+            }  }
+    }
+
+    public function restorerAll()
+    {
+        // ce bout de code nous permet de restorer toutes les données qui ont été supprimés
+        $restores = Fonctionpublic::onlyTrashed();
+
+        $restores->restore();
+
+        if ($restores) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'toutes les données supprimées ont été restorées'
+            ], 200);
+        } else {
+
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'rien a restoré'
+                ],
+                404
+            );
+        }
     }
 }
