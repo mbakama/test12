@@ -16,13 +16,14 @@ class FonctionpublicController extends Controller
     {
         $all = DB::table('fonctionpublics')->get();
 
-        if ($all->count()>0) {
-           return response()->json(
-            [
-                'status'=>200,
-                'all'=>$all
-            ],200
-           );
+        if ($all->count() > 0) {
+            return response()->json(
+                [
+                    'status' => 200,
+                    'all' => $all
+                ],
+                200
+            );
         } else {
             return response()->json(
                 [
@@ -48,30 +49,30 @@ class FonctionpublicController extends Controller
     public function store(Request $request)
     {
         $detail = Validator::make(
-           //
+            //
             $request->all(),
             [
-                "NumMinTravail"=>'required',
-                "Num"=>'required',
-                "NomExpatrier"=>'required',
-                "LieuNais"=>'required',
-                "DateNais"=>'required',
-                "DateProgr"=>'required',
-                "CodePays"=>'required',
-                "Fonction"=>'required',
-                "AdresseAffectation"=>'required',
-                "Obervation"=>'required',
-                "NbreRenouvellement"=>'',
-                "NbreNationaux"=>'required',
-                "NbreExpatrie"=>'required',
-                "Annee"=>'required',
-                "CodeMois"=>'required',
-                "DateCreation"=>'required',
-                "CoNum"=>'required',
-                "Status"=>'required'
+                "NumMinTravail" => 'bail|required|numeric',
+                "Num" => 'bail|required|numeric',
+                "NomExpatrier" => 'bail|required',
+                "LieuNais" => 'bail|required',
+                "DateNais" => 'bail|required',
+                "DateProgr" => 'bail|required',
+                "CodePays" => 'bail|required|numeric',
+                "Fonction" => 'bail|required|',
+                "AdresseAffectation" => 'bail|required|alpha',
+                "Obervation" => 'bail|required|numeric',
+                "NbreRenouvellement" => 'nullable',
+                "NbreNationaux" => 'bail|required|numeric',
+                "NbreExpatrie" => 'bail|required|numeric',
+                "Annee" => 'bail|required',
+                "CodeMois" => 'bail|required|numeric',
+                "DateCreation" => 'bail|required',
+                "CoNum" => 'bail|required|numeric',
+                "Status" =>'bail|required|boolean'
             ],
-         
-        ); 
+
+        );
         if ($detail->fails()) {
             return response()->json(
                 [
@@ -83,24 +84,24 @@ class FonctionpublicController extends Controller
         } else {
             $insert = DB::table('fonctionpublics')->insert(
                 [
-                    "NumMinTravail"=>$request->NumMinTravail,
-                    "Num"=>$request->Num,
-                    "NomExpatrier"=>$request->NomExpatrier,
-                    "LieuNais"=>$request->LieuNais,
-                    "DateNais"=>$request->DateNais,
-                    "DateProgr"=>$request->DateProgr,
-                    "CodePays"=>$request->CodePays,
-                    "Fonction"=>$request->Fonction,
-                    "AdresseAffectation"=>$request->AdresseAffectation,
-                    "Obervation"=>$request->Obervation,
-                    "NbreRenouvellement"=>$request->NbreRenouvellement,
-                    "NbreNationaux"=>$request->NbreNationaux,
-                    "NbreExpatrie"=>$request->NbreExpatrie,
-                    "Annee"=>$request->Annee,
-                    "CodeMois"=>$request->CodeMois,
-                    "DateCreation"=>$request->DateCreation,
-                    "CoNum"=>$request->CoNum,
-                    "Status"=>$request->Status
+                    "NumMinTravail" => $request->NumMinTravail,
+                    "Num" => $request->Num,
+                    "NomExpatrier" => $request->NomExpatrier,
+                    "LieuNais" => $request->LieuNais,
+                    "DateNais" => $request->DateNais,
+                    "DateProgr" => $request->DateProgr,
+                    "CodePays" => $request->CodePays,
+                    "Fonction" => $request->Fonction,
+                    "AdresseAffectation" => $request->AdresseAffectation,
+                    "Obervation" => $request->Obervation,
+                    "NbreRenouvellement" => $request->NbreRenouvellement,
+                    "NbreNationaux" => $request->NbreNationaux,
+                    "NbreExpatrie" => $request->NbreExpatrie,
+                    "Annee" => $request->Annee,
+                    "CodeMois" => $request->CodeMois,
+                    "DateCreation" => $request->DateCreation,
+                    "CoNum" => $request->CoNum,
+                    "Status" => $request->Status
                 ]
             );
 
@@ -135,16 +136,17 @@ class FonctionpublicController extends Controller
         if ($id_data) {
             return response()->json(
                 [
-                    'status'=>200,
-                    'id_data'=>$id_data
+                    'status' => 200,
+                    'id_data' => $id_data
                 ]
             );
         } else {
-              return response()->json(
+            return response()->json(
                 [
-                    'status'=>404,
-                    'message'=>'cet id nexiste pas'
-                ],404
+                    'status' => 404,
+                    'message' => 'cet id nexiste pas'
+                ],
+                404
             );
         }
     }
@@ -164,81 +166,81 @@ class FonctionpublicController extends Controller
     {
         $updates = Validator::make(
             //
-             $request->all(),
-             [
-                 "NumMinTravail"=>'required',
-                 "Num"=>'required',
-                 "NomExpatrier"=>'required',
-                 "LieuNais"=>'required',
-                 "DateNais"=>'required',
-                 "DateProgr"=>'required',
-                 "CodePays"=>'required',
-                 "Fonction"=>'required',
-                 "AdresseAffectation"=>'required',
-                 "Obervation"=>'required',
-                 "NbreRenouvellement"=>'',
-                 "NbreNationaux"=>'required',
-                 "NbreExpatrie"=>'required',
-                 "Annee"=>'required',
-                 "CodeMois"=>'required',
-                 "DateCreation"=>'required',
-                 "CoNum"=>'required',
-                 "Status"=>'required'
-             ],
-          
-         ); 
-         if ($updates->fails()) {
-             return response()->json(
-                 [
-                     'status' => 442,
-                     'message' => $updates->messages()
-                 ],
-                 442
-             );
-         } else { 
+            $request->all(),
+            [
+                "NumMinTravail" => 'required',
+                "Num" => 'required',
+                "NomExpatrier" => 'required',
+                "LieuNais" => 'required',
+                "DateNais" => 'required',
+                "DateProgr" => 'required',
+                "CodePays" => 'required',
+                "Fonction" => 'required',
+                "AdresseAffectation" => 'required',
+                "Obervation" => 'required',
+                "NbreRenouvellement" => '',
+                "NbreNationaux" => 'required',
+                "NbreExpatrie" => 'required',
+                "Annee" => 'required',
+                "CodeMois" => 'required',
+                "DateCreation" => 'required',
+                "CoNum" => 'required',
+                "Status" => 'required'
+            ],
 
-             $update = Fonctionpublic::find($id)->update(
-                 [
-                     "NumMinTravail"=>$request->NumMinTravail,
-                     "Num"=>$request->Num,
-                     "NomExpatrier"=>$request->NomExpatrier,
-                     "LieuNais"=>$request->LieuNais,
-                     "DateNais"=>$request->DateNais,
-                     "DateProgr"=>$request->DateProgr,
-                     "CodePays"=>$request->CodePays,
-                     "Fonction"=>$request->Fonction,
-                     "AdresseAffectation"=>$request->AdresseAffectation,
-                     "Obervation"=>$request->Obervation,
-                     "NbreRenouvellement"=>$request->NbreRenouvellement,
-                     "NbreNationaux"=>$request->NbreNationaux,
-                     "NbreExpatrie"=>$request->NbreExpatrie,
-                     "Annee"=>$request->Annee,
-                     "CodeMois"=>$request->CodeMois,
-                     "DateCreation"=>$request->DateCreation,
-                     "CoNum"=>$request->CoNum,
-                     "Status"=>$request->Status
-                 ]
-             );
- 
-             if ($update) {
-                 return response()->json(
-                     [
-                         'status' => 200,
-                         'message' => 'Vos Données sont enregistrées avec success'
-                     ],
-                     200
-                 );
-             } else {
-                 return response()->json(
-                     [
-                         'status' => 500,
-                         'message' => 'verifiez vos codes'
-                     ],
-                     500
-                 );
-             }
- 
-         }
+        );
+        if ($updates->fails()) {
+            return response()->json(
+                [
+                    'status' => 442,
+                    'message' => $updates->messages()
+                ],
+                442
+            );
+        } else {
+
+            $update = Fonctionpublic::find($id)->update(
+                [
+                    "NumMinTravail" => $request->NumMinTravail,
+                    "Num" => $request->Num,
+                    "NomExpatrier" => $request->NomExpatrier,
+                    "LieuNais" => $request->LieuNais,
+                    "DateNais" => $request->DateNais,
+                    "DateProgr" => $request->DateProgr,
+                    "CodePays" => $request->CodePays,
+                    "Fonction" => $request->Fonction,
+                    "AdresseAffectation" => $request->AdresseAffectation,
+                    "Obervation" => $request->Obervation,
+                    "NbreRenouvellement" => $request->NbreRenouvellement,
+                    "NbreNationaux" => $request->NbreNationaux,
+                    "NbreExpatrie" => $request->NbreExpatrie,
+                    "Annee" => $request->Annee,
+                    "CodeMois" => $request->CodeMois,
+                    "DateCreation" => $request->DateCreation,
+                    "CoNum" => $request->CoNum,
+                    "Status" => $request->Status
+                ]
+            );
+
+            if ($update) {
+                return response()->json(
+                    [
+                        'status' => 200,
+                        'message' => 'Vos Données sont enregistrées avec success'
+                    ],
+                    200
+                );
+            } else {
+                return response()->json(
+                    [
+                        'status' => 500,
+                        'message' => 'verifiez vos codes'
+                    ],
+                    500
+                );
+            }
+
+        }
     }
 
     /**
@@ -248,50 +250,51 @@ class FonctionpublicController extends Controller
     {
         $delete = Fonctionpublic::find($id);
 
-       if ($delete) {
-        $delete->delete();
-        return response()->json(
-            [
-                'status' =>200,
-                'message'=>'vous avez supprimeé une donnee avec success'
-            ],200
-        );
-       } else {
-        return response()->json(
-            [
-                'status' =>404,
-                'message'=>'cet id nexiste pas'
-            ],404
-        );
-       }
-       
+        if ($delete) {
+            $delete->delete();
+            return response()->json(
+                [
+                    'status' => 200,
+                    'message' => 'vous avez supprimeé une donnee avec success'
+                ],
+                200
+            );
+        } else {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'cet id nexiste pas'
+                ],
+                404
+            );
+        } 
 
-        
     }
     public function restorer($id)
     {
         $data = Fonctionpublic::withTrashed()->find($id);
 
         if ($data && $data->trashed()) {
-             $data->restore();
+            $data->restore();
 
-              return response()->json([
+            return response()->json([
                 'status' => 200,
                 'message' =>
                 'felicitation vous avez restoré un enregistrement'
             ], 200);
         } else {
-             if (isset($data->id)) {
+            if (isset($data->id)) {
                 return response()->json([
                     'status' => 500,
                     'message' => 'cette donnée a été déja restorée'
                 ], 500);
             } else {
-                 return response()->json([
-                'status' => 404,
-                'message' => 'cet id n\'existe pas'
-            ], 404);
-            }  }
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'cet id n\'existe pas'
+                ], 404);
+            }
+        }
     }
 
     public function restorerAll()

@@ -16,10 +16,10 @@ class DetailfpController extends Controller
     {
         $donnees = DB::table('detailfps')->get();
 
-        if ($donnees->count()>0) {
-           return response()->json(['status'=>200, 'donnees'=>$donnees], 200);
+        if ($donnees->count() > 0) {
+            return response()->json(['status' => 200, 'donnees' => $donnees], 200);
         } else {
-            return response()->json(['status'=>404, 'message'=>'Aucune donnée disponible pour le momemt'], 404);
+            return response()->json(['status' => 404, 'message' => 'Aucune donnée disponible pour le momemt'], 404);
         }
     }
 
@@ -36,50 +36,55 @@ class DetailfpController extends Controller
      */
     public function store(Request $request)
     {
-        $data = \Illuminate\Support\Facades\Validator::make($request->all(),
-        ['numero'=>'required',
-        'CodeSource'=>'',
-        'MontantCreditFc'=>'required',
-        'MontantCreditUSD'=>'required',
-        'Promoteur'=>'',
-        'AdressPromoteur'=>'',
-        'observation'=>'',
-        'telephone'=>'',
-        'Annee'=>'required',
-        'CoNum'=>'required',
-        'DateCreation'=>'required',
-        'Status'=>'required']
-    );
-     if ($data->fails()) {
-        return response()->json(
-            ['status'=>'404', 'message'=>$data-> messages()],404
-        );
-     } else {
-        //   $run = new Detailfp;
-        $run = DB::table('detailfps')->insert(
-            ['numero'=>$request->numero,
-            'CodeSource'=>$request->CodeSource,
-            'MontantCreditFc'=>$request->MontantCreditFc,
-            'MontantCreditUSD'=>$request->MontantCreditUSD,
-            'Promoteur'=>$request->Promoteur,
-            'AdressPromoteur'=>$request->AdressPromoteur,
-            'observation'=>$request->observation,
-            'telephone'=>$request->telephone,
-            'Annee'=>$request->Annee,
-            'CoNum'=>$request->CoNum,
-            'DateCreation'=>$request->DateCreation,
-            'Status'=>$request->Status,
-            'user_id'=>Auth::user()->id
+        $data = \Illuminate\Support\Facades\Validator::make(
+            $request->all(),
+            [
+                'numero' => 'required',
+                'CodeSource' => '',
+                'MontantCreditFc' => 'required',
+                'MontantCreditUSD' => 'required',
+                'Promoteur' => '',
+                'AdressPromoteur' => '',
+                'observation' => '',
+                'telephone' => '',
+                'Annee' => 'required',
+                'CoNum' => 'required',
+                'DateCreation' => 'required',
+                'Status' => 'required'
             ]
         );
-
-        if ($run) {
-            return response()->json(['status'=>200,'messsage'=>'données stockées avec success'],200);
+        if ($data->fails()) {
+            return response()->json(
+                ['status' => '404', 'message' => $data->messages()],
+                404
+            );
         } else {
-            return response()->json(['status'=>500,'message'=>'il ya peut etre une erreur quelque pqrt dans le code'],500);
-        }
+            //   $run = new Detailfp;
+            $run = DB::table('detailfps')->insert(
+                [
+                    'numero' => $request->numero,
+                    'CodeSource' => $request->CodeSource,
+                    'MontantCreditFc' => $request->MontantCreditFc,
+                    'MontantCreditUSD' => $request->MontantCreditUSD,
+                    'Promoteur' => $request->Promoteur,
+                    'AdressPromoteur' => $request->AdressPromoteur,
+                    'observation' => $request->observation,
+                    'telephone' => $request->telephone,
+                    'Annee' => $request->Annee,
+                    'CoNum' => $request->CoNum,
+                    'DateCreation' => $request->DateCreation,
+                    'Status' => $request->Status,
+                    'user_id' => Auth::user()->id
+                ]
+            );
 
-     }
+            if ($run) {
+                return response()->json(['status' => 200, 'messsage' => 'données stockées avec success'], 200);
+            } else {
+                return response()->json(['status' => 500, 'message' => 'il ya peut etre une erreur quelque pqrt dans le code'], 500);
+            }
+
+        }
 
     }
 
@@ -93,21 +98,23 @@ class DetailfpController extends Controller
         if ($data) {
             return response()->json(
                 [
-                    'status'=>200,
-                    'detailfp'=>$data,
-                ],200
+                    'status' => 200,
+                    'detailfp' => $data,
+                ],
+                200
             );
         } else {
             return response()->json(
                 [
-                    'status'=>404,
-                    'message'=>'cet id n\'existe pas',
-                ],404
+                    'status' => 404,
+                    'message' => 'cet id n\'existe pas',
+                ],
+                404
             );
-            
+
         }
 
-       
+
     }
 
     /**
@@ -123,51 +130,56 @@ class DetailfpController extends Controller
      */
     public function update(Request $request, $detailfp)
     {
-         $data = \Illuminate\Support\Facades\Validator::make($request->all(),
-        ['numero'=>'required',
-        'CodeSource'=>'',
-        'MontantCreditFc'=>'required',
-        'MontantCreditUSD'=>'required',
-        'Promoteur'=>'',
-        'AdressPromoteur'=>'',
-        'observation'=>'',
-        'telephone'=>'',
-        'Annee'=>'required',
-        'CoNum'=>'required',
-        'DateCreation'=>'required',
-        'Status'=>'required']
-    );
-     if ($data->fails()) {
-        return response()->json(
-            ['status'=>'404', 'message'=>$data-> messages()],404
-        );
-     } else {
-        //   $run = new Detailfp;
-        
-        $run = Detailfp::find($detailfp)->update(
-            ['numero'=>$request->numero,
-            'CodeSource'=>$request->CodeSource,
-            'MontantCreditFc'=>$request->MontantCreditFc,
-            'MontantCreditUSD'=>$request->MontantCreditUSD,
-            'Promoteur'=>$request->Promoteur,
-            'AdressPromoteur'=>$request->AdressPromoteur,
-            'observation'=>$request->observation,
-            'telephone'=>$request->telephone,
-            'Annee'=>$request->Annee,
-            'CoNum'=>$request->CoNum,
-            'DateCreation'=>$request->DateCreation,
-            'Status'=>$request->Status,
-            'user_id'=>Auth::user()->id
+        $data = \Illuminate\Support\Facades\Validator::make(
+            $request->all(),
+            [
+                'numero' => 'required|numer',
+                'CodeSource' => '',
+                'MontantCreditFc' => 'required',
+                'MontantCreditUSD' => 'required',
+                'Promoteur' => '',
+                'AdressPromoteur' => '',
+                'observation' => '',
+                'telephone' => '',
+                'Annee' => 'required',
+                'CoNum' => 'required',
+                'DateCreation' => 'required',
+                'Status' => 'required'
             ]
         );
-
-        if ($run) {
-            return response()->json(['status'=>200,'messsage'=>'données modifié avec success'],200);
+        if ($data->fails()) {
+            return response()->json(
+                ['status' => '404', 'message' => $data->messages()],
+                404
+            );
         } else {
-            return response()->json(['status'=>500,'message'=>'il ya peut etre une erreur quelque pqrt dans le code'],500);
-        }
+            //   $run = new Detailfp;
 
-     }
+            $run = Detailfp::find($detailfp)->update(
+                [
+                    'numero' => $request->numero,
+                    'CodeSource' => $request->CodeSource,
+                    'MontantCreditFc' => $request->MontantCreditFc,
+                    'MontantCreditUSD' => $request->MontantCreditUSD,
+                    'Promoteur' => $request->Promoteur,
+                    'AdressPromoteur' => $request->AdressPromoteur,
+                    'observation' => $request->observation,
+                    'telephone' => $request->telephone,
+                    'Annee' => $request->Annee,
+                    'CoNum' => $request->CoNum,
+                    'DateCreation' => $request->DateCreation,
+                    'Status' => $request->Status,
+                    'user_id' => Auth::user()->id
+                ]
+            );
+
+            if ($run) {
+                return response()->json(['status' => 200, 'messsage' => 'données modifié avec success'], 200);
+            } else {
+                return response()->json(['status' => 500, 'message' => 'il ya peut etre une erreur quelque pqrt dans le code'], 500);
+            }
+
+        }
     }
 
     /**
@@ -178,11 +190,11 @@ class DetailfpController extends Controller
         $data = Detailfp::find($detailfp);
 
         if ($data) {
-           $data->delete();
+            $data->delete();
 
-           return response()->json(['status'=>200,'messsage'=>'supprission reussi'],200);
+            return response()->json(['status' => 200, 'messsage' => 'supprission reussi'], 200);
         } else {
-          return response()->json(['status'=>500,'message'=>'il ya peut etre une erreur quelque pqrt dans le code'],500);
+            return response()->json(['status' => 500, 'message' => 'il ya peut etre une erreur quelque pqrt dans le code'], 500);
         }
     }
 
@@ -191,27 +203,25 @@ class DetailfpController extends Controller
         $data = Detailfp::withTrashed()->find($detailfp);
 
         if ($data && $data->trashed()) {
-             $data->restore();
+            $data->restore();
 
-              return response()->json([
+            return response()->json([
                 'status' => 200,
                 'message' =>
                 'felicitation vous avez restoré un enregistrement'
             ], 200);
         } else {
-             if (isset($data->id)) {
+            if (isset($data->id)) {
                 return response()->json([
                     'status' => 500,
                     'message' => 'cette donnée a été déja restorée'
                 ], 500);
             } else {
-                 return response()->json([
-                'status' => 404,
-                'message' => 'cet id n\'existe pas'
-            ], 404);
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'cet id n\'existe pas'
+                ], 404);
             }
-           
-        
         }
     }
 
