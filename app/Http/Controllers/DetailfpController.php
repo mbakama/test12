@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DetailRequest;
+use App\Http\Resources\DetailResource;
 use App\Models\Detailfp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,15 +23,7 @@ class DetailfpController extends Controller
         } else {
             return response()->json(['status' => 404, 'message' => 'Aucune donnée disponible pour le momemt'], 404);
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    } 
 
     /**
      * Store a newly created resource in storage.
@@ -39,7 +33,7 @@ class DetailfpController extends Controller
         $data = \Illuminate\Support\Facades\Validator::make(
             $request->all(),
             [
-                'numero' => 'required',
+                'numero'=>'required',
                 'CodeSource' => '',
                 'MontantCreditFc' => 'required',
                 'MontantCreditUSD' => 'required',
@@ -59,7 +53,7 @@ class DetailfpController extends Controller
                 404
             );
         } else {
-            //   $run = new Detailfp;
+            //     //   $run = new Detailfp;
             $run = DB::table('detailfps')->insert(
                 [
                     'numero' => $request->numero,
@@ -85,9 +79,7 @@ class DetailfpController extends Controller
             }
 
         }
-
     }
-
     /**
      * Display the specified resource.
      */
@@ -96,18 +88,12 @@ class DetailfpController extends Controller
         $data = Detailfp::find($detailfp);
 
         if ($data) {
-            return response()->json(
-                [
-                    'status' => 200,
-                    'detailfp' => $data,
-                ],
-                200
-            );
+            return new DetailResource($data);
         } else {
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'cet id n\'existe pas',
+                    'message' => 'cet id n\'existe pas dans notre base de donnée',
                 ],
                 404
             );
@@ -117,17 +103,7 @@ class DetailfpController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Detailfp $detailfp)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
+   
     public function update(Request $request, $detailfp)
     {
         $data = \Illuminate\Support\Facades\Validator::make(
@@ -152,8 +128,7 @@ class DetailfpController extends Controller
                 ['status' => '404', 'message' => $data->messages()],
                 404
             );
-        } else {
-            //   $run = new Detailfp;
+        } else { 
 
             $run = Detailfp::find($detailfp)->update(
                 [
@@ -174,9 +149,9 @@ class DetailfpController extends Controller
             );
 
             if ($run) {
-                return response()->json(['status' => 200, 'messsage' => 'données modifié avec success'], 200);
+                return response()->json(['status' => 200, 'messsage' => 'Modification effectuée'], 200);
             } else {
-                return response()->json(['status' => 500, 'message' => 'il ya peut etre une erreur quelque pqrt dans le code'], 500);
+                return response()->json(['status' => 500, 'message' => 'il ya peut etre une erreur quelque part dans le code'], 500);
             }
 
         }

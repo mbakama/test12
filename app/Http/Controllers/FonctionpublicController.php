@@ -21,16 +21,16 @@ class FonctionpublicController extends Controller
                 [
                     'status' => 200,
                     'all' => $all
-                ],
-                200
+            ],
+            200
             );
         } else {
             return response()->json(
                 [
                     'status' => 404,
                     'message' => 'la table est vide'
-                ],
-                404
+            ],
+            404
             );
         }
     }
@@ -51,26 +51,26 @@ class FonctionpublicController extends Controller
         $detail = Validator::make(
             //
             $request->all(),
-            [
-                "NumMinTravail" => 'bail|required|numeric',
-                "Num" => 'bail|required|numeric',
-                "NomExpatrier" => 'bail|required',
-                "LieuNais" => 'bail|required',
-                "DateNais" => 'bail|required',
-                "DateProgr" => 'bail|required',
-                "CodePays" => 'bail|required|numeric',
-                "Fonction" => 'bail|required|',
-                "AdresseAffectation" => 'bail|required|alpha',
-                "Obervation" => 'bail|required|numeric',
-                "NbreRenouvellement" => 'nullable',
-                "NbreNationaux" => 'bail|required|numeric',
-                "NbreExpatrie" => 'bail|required|numeric',
-                "Annee" => 'bail|required',
-                "CodeMois" => 'bail|required|numeric',
-                "DateCreation" => 'bail|required',
-                "CoNum" => 'bail|required|numeric',
-                "Status" =>'bail|required|boolean'
-            ],
+        [
+            "NumMinTravail" => 'bail|required|numeric',
+            "Num" => 'bail|required|numeric',
+            "NomExpatrier" => 'bail|required',
+            "LieuNais" => 'bail|required',
+            "DateNais" => 'bail|required',
+            "DateProgr" => 'bail|required',
+            "CodePays" => 'bail|required|numeric',
+            "Fonction" => 'bail|required|',
+            "AdresseAffectation" => 'bail|required|alpha',
+            "Obervation" => 'bail|required|numeric',
+            "NbreRenouvellement" => 'nullable',
+            "NbreNationaux" => 'bail|required|numeric',
+            "NbreExpatrie" => 'bail|required|numeric',
+            "Annee" => 'bail|required',
+            "CodeMois" => 'bail|required|numeric',
+            "DateCreation" => 'bail|required',
+            "CoNum" => 'bail|required|numeric',
+            "Status" => 'bail|required|boolean'
+        ],
 
         );
         if ($detail->fails()) {
@@ -78,31 +78,31 @@ class FonctionpublicController extends Controller
                 [
                     'status' => 442,
                     'message' => $detail->messages()
-                ],
-                442
+            ],
+            442
             );
         } else {
             $insert = DB::table('fonctionpublics')->insert(
                 [
-                    "NumMinTravail" => $request->NumMinTravail,
-                    "Num" => $request->Num,
-                    "NomExpatrier" => $request->NomExpatrier,
-                    "LieuNais" => $request->LieuNais,
-                    "DateNais" => $request->DateNais,
-                    "DateProgr" => $request->DateProgr,
-                    "CodePays" => $request->CodePays,
-                    "Fonction" => $request->Fonction,
-                    "AdresseAffectation" => $request->AdresseAffectation,
-                    "Obervation" => $request->Obervation,
-                    "NbreRenouvellement" => $request->NbreRenouvellement,
-                    "NbreNationaux" => $request->NbreNationaux,
-                    "NbreExpatrie" => $request->NbreExpatrie,
-                    "Annee" => $request->Annee,
-                    "CodeMois" => $request->CodeMois,
-                    "DateCreation" => $request->DateCreation,
-                    "CoNum" => $request->CoNum,
-                    "Status" => $request->Status
-                ]
+                "NumMinTravail" => $request->NumMinTravail,
+                "Num" => $request->Num,
+                "NomExpatrier" => $request->NomExpatrier,
+                "LieuNais" => $request->LieuNais,
+                "DateNais" => $request->DateNais,
+                "DateProgr" => $request->DateProgr,
+                "CodePays" => $request->CodePays,
+                "Fonction" => $request->Fonction,
+                "AdresseAffectation" => $request->AdresseAffectation,
+                "Obervation" => $request->Obervation,
+                "NbreRenouvellement" => $request->NbreRenouvellement,
+                "NbreNationaux" => $request->NbreNationaux,
+                "NbreExpatrie" => $request->NbreExpatrie,
+                "Annee" => $request->Annee,
+                "CodeMois" => $request->CodeMois,
+                "DateCreation" => $request->DateCreation,
+                "CoNum" => $request->CoNum,
+                "Status" => $request->Status
+            ]
             );
 
             if ($insert) {
@@ -110,16 +110,16 @@ class FonctionpublicController extends Controller
                     [
                         'status' => 200,
                         'message' => 'Vos Données sont enregistrées avec success'
-                    ],
-                    200
+                ],
+                200
                 );
             } else {
                 return response()->json(
                     [
                         'status' => 500,
                         'message' => 'verifiez vos codes'
-                    ],
-                    500
+                ],
+                500
                 );
             }
 
@@ -138,15 +138,15 @@ class FonctionpublicController extends Controller
                 [
                     'status' => 200,
                     'id_data' => $id_data
-                ]
+            ]
             );
         } else {
             return response()->json(
                 [
                     'status' => 404,
                     'message' => 'cet id nexiste pas'
-                ],
-                404
+            ],
+            404
             );
         }
     }
@@ -167,26 +167,26 @@ class FonctionpublicController extends Controller
         $updates = Validator::make(
             //
             $request->all(),
-            [
-                "NumMinTravail" => 'required',
-                "Num" => 'required',
-                "NomExpatrier" => 'required',
-                "LieuNais" => 'required',
-                "DateNais" => 'required',
-                "DateProgr" => 'required',
-                "CodePays" => 'required',
-                "Fonction" => 'required',
-                "AdresseAffectation" => 'required',
-                "Obervation" => 'required',
-                "NbreRenouvellement" => '',
-                "NbreNationaux" => 'required',
-                "NbreExpatrie" => 'required',
-                "Annee" => 'required',
-                "CodeMois" => 'required',
-                "DateCreation" => 'required',
-                "CoNum" => 'required',
-                "Status" => 'required'
-            ],
+        [
+            "NumMinTravail" => 'bail|required|numeric',
+            "Num" => 'bail|required|numeric',
+            "NomExpatrier" => 'bail|required',
+            "LieuNais" => 'bail|required',
+            "DateNais" => 'bail|required',
+            "DateProgr" => 'bail|required',
+            "CodePays" => 'bail|required|numeric',
+            "Fonction" => 'bail|required|',
+            "AdresseAffectation" => 'bail|required|alpha',
+            "Obervation" => 'bail|required|numeric',
+            "NbreRenouvellement" => 'nullable',
+            "NbreNationaux" => 'bail|required|numeric',
+            "NbreExpatrie" => 'bail|required|numeric',
+            "Annee" => 'bail|required',
+            "CodeMois" => 'bail|required|numeric',
+            "DateCreation" => 'bail|required',
+            "CoNum" => 'bail|required|numeric',
+            "Status" => 'bail|required|boolean'
+        ],
 
         );
         if ($updates->fails()) {
@@ -194,32 +194,31 @@ class FonctionpublicController extends Controller
                 [
                     'status' => 442,
                     'message' => $updates->messages()
-                ],
-                442
+            ],
+            442
             );
         } else {
-
             $update = Fonctionpublic::find($id)->update(
                 [
-                    "NumMinTravail" => $request->NumMinTravail,
-                    "Num" => $request->Num,
-                    "NomExpatrier" => $request->NomExpatrier,
-                    "LieuNais" => $request->LieuNais,
-                    "DateNais" => $request->DateNais,
-                    "DateProgr" => $request->DateProgr,
-                    "CodePays" => $request->CodePays,
-                    "Fonction" => $request->Fonction,
-                    "AdresseAffectation" => $request->AdresseAffectation,
-                    "Obervation" => $request->Obervation,
-                    "NbreRenouvellement" => $request->NbreRenouvellement,
-                    "NbreNationaux" => $request->NbreNationaux,
-                    "NbreExpatrie" => $request->NbreExpatrie,
-                    "Annee" => $request->Annee,
-                    "CodeMois" => $request->CodeMois,
-                    "DateCreation" => $request->DateCreation,
-                    "CoNum" => $request->CoNum,
-                    "Status" => $request->Status
-                ]
+                "NumMinTravail" => $request->NumMinTravail,
+                "Num" => $request->Num,
+                "NomExpatrier" => $request->NomExpatrier,
+                "LieuNais" => $request->LieuNais,
+                "DateNais" => $request->DateNais,
+                "DateProgr" => $request->DateProgr,
+                "CodePays" => $request->CodePays,
+                "Fonction" => $request->Fonction,
+                "AdresseAffectation" => $request->AdresseAffectation,
+                "Obervation" => $request->Obervation,
+                "NbreRenouvellement" => $request->NbreRenouvellement,
+                "NbreNationaux" => $request->NbreNationaux,
+                "NbreExpatrie" => $request->NbreExpatrie,
+                "Annee" => $request->Annee,
+                "CodeMois" => $request->CodeMois,
+                "DateCreation" => $request->DateCreation,
+                "CoNum" => $request->CoNum,
+                "Status" => $request->Status
+            ]
             );
 
             if ($update) {
@@ -227,16 +226,16 @@ class FonctionpublicController extends Controller
                     [
                         'status' => 200,
                         'message' => 'Vos Données sont enregistrées avec success'
-                    ],
-                    200
+                ],
+                200
                 );
             } else {
                 return response()->json(
                     [
                         'status' => 500,
                         'message' => 'verifiez vos codes'
-                    ],
-                    500
+                ],
+                500
                 );
             }
 
@@ -255,19 +254,19 @@ class FonctionpublicController extends Controller
             return response()->json(
                 [
                     'status' => 200,
-                    'message' => 'vous avez supprimeé une donnee avec success'
-                ],
-                200
+                    'message' => 'vous avez supprimeé une donnée avec success'
+            ],
+            200
             );
         } else {
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'cet id nexiste pas'
-                ],
-                404
+                    'message' => 'cet id n\'existe pas'
+            ],
+            404
             );
-        } 
+        }
 
     }
     public function restorer($id)
@@ -301,22 +300,20 @@ class FonctionpublicController extends Controller
     {
         // ce bout de code nous permet de restorer toutes les données qui ont été supprimés
         $restores = Fonctionpublic::onlyTrashed();
-
-        $restores->restore();
-
-        if ($restores) {
+        //dabord on execute cette instruction pour verifier dans la base de donnee s'il y a des donnees effaces
+        if ($restores->count() > 0) {
+            $restores->restore(); 
             return response()->json([
                 'status' => 200,
                 'message' => 'toutes les données supprimées ont été restorées'
             ], 200);
         } else {
-
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'rien a restoré'
-                ],
-                404
+                    'message' => 'rien a restoré pour le moment'
+            ],
+            404
             );
         }
     }
