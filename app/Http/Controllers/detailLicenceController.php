@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DetailResource;
 use Illuminate\Http\Request;
 use App\Models\DetailLicence;
 use Illuminate\Support\Facades\DB;
@@ -14,49 +15,36 @@ use Illuminate\Support\Facades\Validator;
      */
     public function index()
     {
-        $details = DB::table('detail_licences')->get();
+        $details = DetailLicence::all();
 
         if ($details->count() > 0) {
-            return response()->json(
-                [
-                    'status' => 200,
-                    'details' => $details
-                ],
-                200
-            );
+            return DetailResource::collection($details);
         } else {
             return response()->json(
                 [
-                    'status' => 404,
+                    'status' => 204,
                     'message' => 'pas des données disponibles'
                 ],
-                404
+                204
             );
         }
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-  
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
     {
         $detail = Validator::make(
            //
             $request->all(),
             [
-                'CodeDetailLicence' => 'required',
-                'serie' => 'required',
-                'codeDouane' => 'required',
-                'codePaysOrg' => 'required',
-                'quantite' => 'required',
-                'codeDevice' => 'required',
-                'prixUnit' => 'required',
+                'CodeDetailLicence' => 'required|numeric|min:5',
+                'serie' => 'required|alpha_dash:ascii',
+                'codeDouane' => 'required|numeric',
+                'codePaysOrg' => 'required|numeric',
+                'quantite' => 'required|numeric',
+                'codeDevice' => 'required|numeric',
+                'prixUnit' => 'required|numeric',
                 'unitStat' => 'required',
                 'DateSaisie' => 'required'
             ],
@@ -89,10 +77,10 @@ use Illuminate\Support\Facades\Validator;
             if ($insert) {
                 return response()->json(
                     [
-                        'status' => 200,
+                        'status' => 201,
                         'message' => 'Vos Données sont enregistrées avec success'
                     ],
-                    200
+                    201
                 );
             } else {
                 return response()->json(
@@ -116,10 +104,7 @@ use Illuminate\Support\Facades\Validator;
         $details = DetailLicence::find($detail);
 
         if ($details) {
-            return response()->json([
-                'statut' => 200,
-                'detail' => $details
-            ], 200);
+            return new DetailResource($details);
         } else {
             return response()->json([
                 'statut' => 404,
@@ -142,13 +127,13 @@ use Illuminate\Support\Facades\Validator;
         $detail = Validator::make(
             $request->all(),
             [
-                'CodeDetailLicence' => 'required',
-                'serie' => 'required',
-                'codeDouane' => 'required',
-                'codePaysOrg' => 'required',
-                'quantite' => 'required',
-                'codeDevice' => 'required',
-                'prixUnit' => 'required',
+                'CodeDetailLicence' => 'required|numeric|min:5',
+                'serie' => 'required|alpha_dash:ascii',
+                'codeDouane' => 'required|numeric',
+                'codePaysOrg' => 'required|numeric',
+                'quantite' => 'required|numeric',
+                'codeDevice' => 'required|numeric',
+                'prixUnit' => 'required|numeric',
                 'unitStat' => 'required',
                 'DateSaisie' => 'required'
             ]
@@ -183,18 +168,18 @@ use Illuminate\Support\Facades\Validator;
                     );
                     return response()->json(
                         [
-                            'status' => 200,
+                            'status' => 201,
                             'message' => 'Vos données ont été modifiées avec success'
                         ],
-                        200
+                        201
                     );
                 } else {
                     return response()->json(
                         [
-                            'status' => 500,
+                            'status' => 403,
                             'message' => 'vous n\'etes pas autorizé a editer ce poste'
                         ],
-                        500
+                        403
                     );
                 }
             } else {
@@ -206,7 +191,7 @@ use Illuminate\Support\Facades\Validator;
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $delete)
+    public function destroy($delete)
     {
         $detail = DetailLicence::find($delete);
 
@@ -224,10 +209,10 @@ use Illuminate\Support\Facades\Validator;
             } else {
                 return response()->json(
                     [
-                        'status' => 442,
+                        'status' => 403,
                         'message' => 'vous n\'etes pas autorisé a effectué cette action'
                     ],
-                    422
+                    403
                 );
             }
         } else {
@@ -254,16 +239,16 @@ use Illuminate\Support\Facades\Validator;
             $restore->restore();
 
             return response()->json([
-                'status' => 200,
+                'status' => 201,
                 'message' =>
                 'felicitation vous avez restoré un enregistrement'
-            ], 200);
+            ], 201);
         } else {
             if (isset($restore->id)) {
                 return response()->json([
-                    'status' => 500,
+                    'status' => 204,
                     'message' => 'cette donnée a été déja restorée'
-                ], 500);
+                ], 204);
             }
             return response()->json([
                 'status' => 404,
@@ -278,25 +263,52 @@ use Illuminate\Support\Facades\Validator;
     public function restores()
     {
         // ce bout de code nous permet de restorer toutes les données qui ont été supprimés
-        $restores = DetailLicence::onlyTrashed();
+         // ce bout de code nous permet de restorer toutes les données qui ont été supprimés
+         $restores = DetailLicence::onlyTrashed();
 
-        $restores->restore();
 
-        if ($restores) {
-            return response()->json([
-                'status' => 200,
-                'message' => 'toutes les données supprimés ont été restorées'
-            ], 200);
-        } else {
+         if ($restores->count() > 0) {
+             $restores->restore();
+ 
+             return response()->json([
+                 'status' => 200,
+                 'message' => 'Felicitation vous avez recu a restoré toutes les données supprimées'
+             ], 200);
+         } else {
+ 
+             return response()->json(
+                 [
+                     'status' => 404,
+                     'message' => 'il se peut que vous ayez déja restoré toutes les données supprimées car nous n\'avons trouvé aucune donnée a restoré'
+                 ],
+                 404
+             );
+         }
+ 
+    }
+    public function filter($keyword)
+    {
+        // $detailLicence = $detailLicence->newQuery();
 
-            return response()->json(
-                [
-                    'status' => 404,
-                    'message' => 'rien a restoré'
-                ],
-                404
-            );
+        //  if ($request->has('CodeDetailLicence')) {
+        //     $detailLicence->where('CodeDetailLicence',$request->keyword); 
+        // }
+        // if ($request->has('serie')) {
+            
+        //     $detailLicence->where('serie',$request->keyword); 
+        // }
+        // // if ($request->has('CodeDetailLicence')) {
+        // //     $detailLicence->where('CodeDetailLicence',$request->keyword); 
+        // // }
+        // return $detailLicence->get();
+        // // if ($request->has('serie')) {
+        // //     $detailLicence->where('serie',$request->input('serie'));
+            
+        // // }
+      
+        $fetch = DetailLicence::where('serie','LIKE','%'.$keyword.'%')->get();
+        if (count($fetch)) {
+            var_dump('okay');
         }
-
     }
 }

@@ -35,9 +35,8 @@ Route::get('detail/{detail}', [detailLicenceController::class, 'show'])->name('s
 
 // FPI
 Route::get('detailfpis', [FpiController::class,'index']);
-Route::get('detailfpi/{id}', [FpiController::class,'show']);
+Route::get('detailfpi/{id}', [FpiController::class,'show']); 
 
-Route::delete('detailfpi/{id}', [FpiController::class,'destroy']);
 
 // Ministere du travail
 ROute::get('fonctions',[FonctionpublicController::class,'index']);
@@ -56,18 +55,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //travail donné hier sur les details de douanes
     Route::post('detail', [detailLicenceController::class, 'store']); 
-    Route::get('detail/restore', [detailLicenceController::class, 'restores']);
+    Route::get('details/restore', [detailLicenceController::class, 'restores']);
     Route::get('detail/restore/{id}', [detailLicenceController::class, 'restore']);
-    Route::put('detail/edit/{id}', [detailLicenceController::class, 'update']);
+    Route::put('detail/{id}', [detailLicenceController::class, 'update']);
     Route::delete('detail/{id}', [detailLicenceController::class, 'destroy']);
-
+    Route::get('search/{keyword}',[detailLicenceController::class,'filter']);
     // donnees provenant de la table FPI
     // Route::post('detailfp',[ DetailfpController::class,'store']);
     Route::post('detailfpi',[FpiController::class,'store']);
-    Route::put('detailfp/{detailfp}',[DetailfpController::class,'update']);
-    Route::delete('detailfp/{detailfp}',[DetailfpController::class,'destroy']); 
-    Route::get('detailfps/restorer', [DetailfpController::class, 'restorerAll']);
-    Route::get('detailfp/restore/{detailfp}', [DetailfpController::class, 'restorer']);
+    Route::put('detailfpi/{id}',[FpiController::class,'update']);
+    Route::delete('detailfpi/{id}', [FpiController::class,'destroy']);
+    Route::get('detailfpis/restorer', [FpiController::class, 'restorerAll']);
+    Route::get('detailfpi/restorer/{id}', [FpiController::class, 'restorer']);
 
     //donnees du ministere du travail 
     Route::post('fonction',[FonctionpublicController::class,'store']);
