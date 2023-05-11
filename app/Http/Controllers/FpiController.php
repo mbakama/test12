@@ -298,4 +298,43 @@ class FpiController extends Controller
         }
 
     }
+    
+    public function search(Request $request)
+    {  
+       $query = Detailfp::query();
+    //ce bout de code nous permet de faire une recherche automatique selon les colonnes que nous avons defini 
+       if ($s = $request->input('search')) {
+          $query->whereRaw("numero LIKE '%".$s."%'")
+            ->orWhereRaw("Annee LIKE '%".$s."%'")
+            ->orWhereRaw("CoNum LIKE '%".$s."%'");
+
+           if($count = count($query->get())>0){
+                return $query->get();
+           } else {
+              return response()->json(
+              [
+                'status'=>404,
+                'message'=>'Desolé, nous n\'avons pas trouvé les données correspondants'
+              ],404  
+            );
+           }
+       }
+       //filtrer selon la colonne serie /asc ou desc
+       if ($sort = $request->input('sort')) {
+           $query->orderBy('serie',$sort);
+           return $query->get();
+       }
+    //    pagination 
+       $perPage = 10;
+       $page = request('page',default:1);
+       $total = $query->count();
+       $fetch = $query->offset(( $page-1)*$perPage)->limit($perPage)->get();
+       
+       return [
+            'data'=>$fetch,
+            'total'=>$total,
+            'page'=>$page,
+            'Derniere_page'=>ceil( $total/$perPage)
+       ];
+    }
 }

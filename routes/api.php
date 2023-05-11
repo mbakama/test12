@@ -60,14 +60,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('detail/{id}', [detailLicenceController::class, 'update']);
     Route::delete('detail/{id}', [detailLicenceController::class, 'destroy']);
     Route::get('search',[detailLicenceController::class,'search']);
+    
     // donnees provenant de la table FPI
-    // Route::post('detailfp',[ DetailfpController::class,'store']);
+    
     Route::post('detailfpi',[FpiController::class,'store']);
     Route::put('detailfpi/{id}',[FpiController::class,'update']);
     Route::delete('detailfpi/{id}', [FpiController::class,'destroy']);
     Route::get('detailfpis/restorer', [FpiController::class, 'restorerAll']);
     Route::get('detailfpi/restorer/{id}', [FpiController::class, 'restorer']);
+    Route::get('search',[FpiController::class,'search']);
 
+    
     //donnees du ministere du travail 
     Route::post('fonction',[FonctionpublicController::class,'store']);
     Route::put('fonction/{id}',[FonctionpublicController::class,'update']);
