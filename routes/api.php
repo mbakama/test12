@@ -59,7 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('detail/restore/{id}', [detailLicenceController::class, 'restore']);
     Route::put('detail/{id}', [detailLicenceController::class, 'update']);
     Route::delete('detail/{id}', [detailLicenceController::class, 'destroy']);
-    Route::get('search/{keyword}',[detailLicenceController::class,'filter']);
+    Route::get('search',[detailLicenceController::class,'search']);
     // donnees provenant de la table FPI
     // Route::post('detailfp',[ DetailfpController::class,'store']);
     Route::post('detailfpi',[FpiController::class,'store']);

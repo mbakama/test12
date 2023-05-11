@@ -286,7 +286,7 @@ use Illuminate\Support\Facades\Validator;
          }
  
     }
-    public function filter($keyword)
+    public function search(Request $request)
     {
         // $detailLicence = $detailLicence->newQuery();
 
@@ -304,11 +304,22 @@ use Illuminate\Support\Facades\Validator;
         // // if ($request->has('serie')) {
         // //     $detailLicence->where('serie',$request->input('serie'));
             
-        // // }
-      
-        $fetch = DetailLicence::where('serie','LIKE','%'.$keyword.'%')->get();
-        if (count($fetch)) {
-            var_dump('okay');
-        }
+        // // } 
+
+    //     if ($fetch) { 
+    //         $fetch = DetailLicence::where('CodeDetailLicence','LIKE','%'.$keyword.'%')->get();
+    //     if (!empty($fetch)) { 
+    //             return response()->json($fetch); 
+    //     }
+    //   }
+        
+       $query = DetailLicence::query();
+
+       if ($s = $request->input('s')) {
+          $query->whereRaw("CodeDetailLicence LIKE '%".$s."%'")
+            ->orWhereRaw("serie LIKE '%".$s."%'");
+         
+       }
+       return $query->get();
     }
-}
+} 
