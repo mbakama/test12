@@ -278,48 +278,55 @@ use Illuminate\Support\Facades\Validator;
  
              return response()->json(
                  [
-                     'status' => 404,
+                     'status' => 204,
                      'message' => 'il se peut que vous ayez déja restoré toutes les données supprimées car nous n\'avons trouvé aucune donnée a restoré'
                  ],
-                 404
+                 204
              );
          }
  
     }
+    /**
+     * Summary of search
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse|array
+     */
     public function search(Request $request)
-    {
-        // $detailLicence = $detailLicence->newQuery();
-
-        //  if ($request->has('CodeDetailLicence')) {
-        //     $detailLicence->where('CodeDetailLicence',$request->keyword); 
-        // }
-        // if ($request->has('serie')) {
-            
-        //     $detailLicence->where('serie',$request->keyword); 
-        // }
-        // // if ($request->has('CodeDetailLicence')) {
-        // //     $detailLicence->where('CodeDetailLicence',$request->keyword); 
-        // // }
-        // return $detailLicence->get();
-        // // if ($request->has('serie')) {
-        // //     $detailLicence->where('serie',$request->input('serie'));
-            
-        // // } 
-
-    //     if ($fetch) { 
-    //         $fetch = DetailLicence::where('CodeDetailLicence','LIKE','%'.$keyword.'%')->get();
-    //     if (!empty($fetch)) { 
-    //             return response()->json($fetch); 
-    //     }
-    //   }
-        
+    {  
        $query = DetailLicence::query();
-
-       if ($s = $request->input('s')) {
+    //ce bout de code nous permet de faire une recherche automatique selon les colonnes que nous avons defini 
+       if ($s = $request->input('search')) {
           $query->whereRaw("CodeDetailLicence LIKE '%".$s."%'")
-            ->orWhereRaw("serie LIKE '%".$s."%'");
-         
+            ->orWhereRaw("serie LIKE '%".$s."%'")
+            ->orWhereRaw("codeDouane LIKE '%".$s."%'");
+
+           if($count = count($query->get())>0){
+                return $query->get();
+           } else {
+              return response()->json(
+              [
+                'status'=>404,
+                'message'=>'Desolé, nous n\'avons pas trouvé les données correspondants'
+              ],404  
+            );
+           }
        }
-       return $query->get();
+       //filtrer selon la colonne serie /asc ou desc
+       if ($sort = $request->input('sort')) {
+           $query->orderBy('serie',$sort);
+           return $query->get();
+       }
+    //    pagination 
+       $perPage = 10;
+       $page = request('page',default:1);
+       $total = $query->count();
+       $fetch = $query->offset(( $page-1)*$perPage)->limit($perPage)->get();
+       
+       return [
+            'data'=>$fetch,
+            'total'=>$total,
+            'page'=>$page,
+            'Derniere_page'=>ceil( $total/$perPage)
+       ];
     }
 } 
