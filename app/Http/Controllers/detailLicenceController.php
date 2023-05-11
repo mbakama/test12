@@ -30,8 +30,11 @@ use Illuminate\Support\Facades\Validator;
         }
 
     }
-
-    
+ /**
+     * Summary of store
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
         $detail = Validator::make(
@@ -112,14 +115,13 @@ use Illuminate\Support\Facades\Validator;
             ], 404);
         }
 
-    }
-
+    } 
+ 
     /**
-     * Show the form for editing the specified resource.
-     */
-
-    /**
-     * Update the specified resource in storage.
+     * Summary of update
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, int $id)
     {
@@ -188,8 +190,11 @@ use Illuminate\Support\Facades\Validator;
         }
     }
 
+   
     /**
-     * Remove the specified resource from storage.
+     * Summary of destroy
+     * @param mixed $delete
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($delete)
     {
