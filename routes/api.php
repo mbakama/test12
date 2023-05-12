@@ -31,52 +31,61 @@ use App\Http\Controllers\detailLicenceController;
 
 
 Route::get('details', [detailLicenceController::class, 'index']);
-Route::get('detail/{detail}', [detailLicenceController::class, 'show'])->name('show'); 
+Route::get('detail/{detail}', [detailLicenceController::class, 'show'])->name('show');
 
 // FPI
-Route::get('detailfpis', [FpiController::class,'index']);
-Route::get('detailfpi/{id}', [FpiController::class,'show']); 
+Route::get('detailfpis', [FpiController::class, 'index']);
+Route::get('detailfpi/{id}', [FpiController::class, 'show']);
 
 
 // Ministere du travail
-ROute::get('fonctions',[FonctionpublicController::class,'index']);
-Route::get('fonction/{id}',[FonctionpublicController::class,'show']);
+ROute::get('fonctions', [FonctionpublicController::class, 'index']);
+Route::get('fonction/{id}', [FonctionpublicController::class, 'show']);
 //authentification 
 Route::post('register', [UserController::class, 'store'])->name('store');
 Route::post('login', [UserController::class, 'login'])->name('login');
 
 
-//example sur l'api avec auth
-// Route::get('articles', [ArticleController::class, 'index']);
+// ce bout de code nous permette de renvoyer un message si la route que l'utisateur veut acceder n'existe pas
+Route::fallback(
+    function () {
+        return response()->json(
+            [
+                'message' => 'Nous ne retrouvons pas la page, si l\'erreur persiste, contactez l\'Adminstrateur'
+            ]
+        );
+    }
 
+);
 
 
 Route::middleware('auth:sanctum')->group(function () {
 
     //travail donné hier sur les details de douanes
-    Route::post('detail', [detailLicenceController::class, 'store']); 
+    Route::post('detail', [detailLicenceController::class, 'store']);
     Route::get('details/restore', [detailLicenceController::class, 'restores']);
     Route::get('detail/restore/{id}', [detailLicenceController::class, 'restore']);
     Route::put('detail/{id}', [detailLicenceController::class, 'update']);
     Route::delete('detail/{id}', [detailLicenceController::class, 'destroy']);
-    Route::get('search',[detailLicenceController::class,'search']);
-    
+    Route::get('search', [detailLicenceController::class, 'search']);
+
     // donnees provenant de la table FPI
-    
-    Route::post('detailfpi',[FpiController::class,'store']);
-    Route::put('detailfpi/{id}',[FpiController::class,'update']);
-    Route::delete('detailfpi/{id}', [FpiController::class,'destroy']);
+
+    Route::post('detailfpi', [FpiController::class, 'store']);
+    Route::put('detailfpi/{id}', [FpiController::class, 'update']);
+    Route::delete('detailfpi/{id}', [FpiController::class, 'destroy']);
     Route::get('detailfpis/restorer', [FpiController::class, 'restorerAll']);
     Route::get('detailfpi/restorer/{id}', [FpiController::class, 'restorer']);
-    Route::get('search',[FpiController::class,'search']);
+    Route::get('detailfpi/search', [FpiController::class, 'search']);
 
-    
+
     //donnees du ministere du travail 
-    Route::post('fonction',[FonctionpublicController::class,'store']);
-    Route::put('fonction/{id}',[FonctionpublicController::class,'update']);
-    Route::delete('fonction/{id}',[FonctionpublicController::class,'destroy']);
+    Route::post('fonction', [FonctionpublicController::class, 'store']);
+    Route::put('fonction/{id}', [FonctionpublicController::class, 'update']);
+    Route::delete('fonction/{id}', [FonctionpublicController::class, 'destroy']);
     Route::get('fonctions/restorer', [FonctionpublicController::class, 'restorerAll']);
     Route::get('fonction/restore/{id}', [FonctionpublicController::class, 'restorer']);
+    Route::get('fonction/search', [FonctionpublicController::class, 'search']);
 
     // Route::post('ajouter',[ArticleController::class,'store'])->name('store');
     // Route::get('article/{article}',[ArticleController::class,'show']);

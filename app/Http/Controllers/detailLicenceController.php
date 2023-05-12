@@ -111,7 +111,7 @@ use Illuminate\Support\Facades\Validator;
         } else {
             return response()->json([
                 'statut' => 404,
-                'message' => 'cet id n\'existe pas ou a été effacé'
+                'message' => 'cet id n\'existe pas ou a été supprimé'
             ], 404);
         }
 
@@ -224,7 +224,7 @@ use Illuminate\Support\Facades\Validator;
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'cet id n\'existe pas'
+                    'message' => 'cet id n\'existe pas ou a éte supprimé'
                 ],
                 404
             );
@@ -244,16 +244,16 @@ use Illuminate\Support\Facades\Validator;
             $restore->restore();
 
             return response()->json([
-                'status' => 201,
+                'status' => 200,
                 'message' =>
                 'felicitation vous avez restoré un enregistrement'
-            ], 201);
+            ], 200);
         } else {
             if (isset($restore->id)) {
                 return response()->json([
-                    'status' => 204,
+                    'status' => 206,
                     'message' => 'cette donnée a été déja restorée'
-                ], 204);
+                ], 206);
             }
             return response()->json([
                 'status' => 404,
@@ -268,28 +268,27 @@ use Illuminate\Support\Facades\Validator;
     public function restores()
     {
         // ce bout de code nous permet de restorer toutes les données qui ont été supprimés
-         // ce bout de code nous permet de restorer toutes les données qui ont été supprimés
-         $restores = DetailLicence::onlyTrashed();
+        $restores = DetailLicence::onlyTrashed();
 
 
-         if ($restores->count() > 0) {
-             $restores->restore();
- 
-             return response()->json([
-                 'status' => 200,
-                 'message' => 'Felicitation vous avez recu a restoré toutes les données supprimées'
-             ], 200);
-         } else {
- 
-             return response()->json(
-                 [
-                     'status' => 204,
-                     'message' => 'il se peut que vous ayez déja restoré toutes les données supprimées car nous n\'avons trouvé aucune donnée a restoré'
-                 ],
-                 204
-             );
-         }
- 
+        if ($restores->count() > 0) {
+            $restores->restore();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Felicitation vous avez recu a restoré toutes les données supprimés'
+            ], 200);
+        } else {
+
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'il se peut que vous ayez déja restoré toutes les données supprimées car nous n\'avons trouvé aucune donnée a restoré'
+                ],
+                404
+            );
+        }
+
     }
     /**
      * Summary of search

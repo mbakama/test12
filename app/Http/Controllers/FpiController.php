@@ -259,9 +259,9 @@ class FpiController extends Controller
         } else {
             if (isset($restore->id)) {
                 return response()->json([
-                    'status' => 500,
+                    'status' => 206,
                     'message' => 'cette donnée a été déja restorée'
-                ], 500);
+                ], 206);
             }
             return response()->json([
                 'status' => 404,
