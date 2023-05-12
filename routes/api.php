@@ -28,65 +28,61 @@ use App\Http\Controllers\detailLicenceController;
 // Route::put('agents/{id}/edit',[AgentController::class,'update']);
 // Route::delete('agents/{id}/delete', [AgentController::class,'destroy']);
 
-
-
-Route::get('details', [detailLicenceController::class, 'index']);
+// Routes additionnelles pour les details licences
+route::prefix('details')->group(function () {
+    Route::get('/', [detailLicenceController::class, 'index']);
+    Route::get('restore', [detailLicenceController::class, 'restores']);
+    Route::get('/search', [detailLicenceController::class, 'search']);
+});
 Route::get('detail/{detail}', [detailLicenceController::class, 'show'])->name('show');
 
-// FPI
-Route::get('detailfpis', [FpiController::class, 'index']);
+// Routes addictionnelles pour les details de la FPI
+Route::prefix('detailfpis')->group(function () {
+    Route::get('/', [FpiController::class, 'index']);
+    Route::get('/search', [FpiController::class, 'search']);
+    Route::get('/restorer', [FpiController::class, 'restorerAll']);
+});
 Route::get('detailfpi/{id}', [FpiController::class, 'show']);
 
-
-// Ministere du travail
-ROute::get('fonctions', [FonctionpublicController::class, 'index']);
+//addictionnelles de route pour les donnees du Ministere du travail 
+Route::prefix('fonctions')->group(function () {
+    Route::get('/', [FonctionpublicController::class, 'index']);
+    Route::get('/restorer', [FonctionpublicController::class, 'restorerAll']);
+    Route::get('/search', [FonctionpublicController::class, 'search']);
+});
 Route::get('fonction/{id}', [FonctionpublicController::class, 'show']);
+
 //authentification 
 Route::post('register', [UserController::class, 'store'])->name('store');
 Route::post('login', [UserController::class, 'login'])->name('login');
 
-
-// ce bout de code nous permette de renvoyer un message si la route que l'utisateur veut acceder n'existe pas
-Route::fallback(
-    function () {
-        return response()->json(
-            [
-                'message' => 'Nous ne retrouvons pas la page, si l\'erreur persiste, contactez l\'Adminstrateur'
-            ]
-        );
-    }
-
-);
-
-
 Route::middleware('auth:sanctum')->group(function () {
 
     //travail donné hier sur les details de douanes
-    Route::post('detail', [detailLicenceController::class, 'store']);
-    Route::get('details/restore', [detailLicenceController::class, 'restores']);
-    Route::get('detail/restore/{id}', [detailLicenceController::class, 'restore']);
-    Route::put('detail/{id}', [detailLicenceController::class, 'update']);
-    Route::delete('detail/{id}', [detailLicenceController::class, 'destroy']);
-    Route::get('search', [detailLicenceController::class, 'search']);
 
-    // donnees provenant de la table FPI
+    Route::prefix('detail')->group(function () {
+        Route::post('/', [detailLicenceController::class, 'store']);
+        Route::put('/{id}', [detailLicenceController::class, 'update']);
+        Route::delete('/{id}', [detailLicenceController::class, 'destroy']);
+        Route::get('/restore/{id}', [detailLicenceController::class, 'restore']);
+    });
 
-    Route::post('detailfpi', [FpiController::class, 'store']);
-    Route::put('detailfpi/{id}', [FpiController::class, 'update']);
-    Route::delete('detailfpi/{id}', [FpiController::class, 'destroy']);
-    Route::get('detailfpis/restorer', [FpiController::class, 'restorerAll']);
-    Route::get('detailfpi/restorer/{id}', [FpiController::class, 'restorer']);
-    Route::get('detailfpi/search', [FpiController::class, 'search']);
+    // Route pour les donnees de la FPI
+    Route::prefix('detailfpi')->group(function () {
+        Route::post('/', [FpiController::class, 'store']);
+        Route::put('/{id}', [FpiController::class, 'update']);
+        Route::delete('/{id}', [FpiController::class, 'destroy']);
+        Route::get('/restorer/{id}', [FpiController::class, 'restorer']);
+    });
+    // Route pour les donnees du ministere du travail 
+    Route::prefix('fonction')->group(function () {
+        Route::post('/', [FonctionpublicController::class, 'store']);
+        Route::put('/{id}', [FonctionpublicController::class, 'update']);
+        Route::delete('/{id}', [FonctionpublicController::class, 'destroy']);
+        Route::get('/restore/{id}', [FonctionpublicController::class, 'restorer']);
+    }); 
 
-
-    //donnees du ministere du travail 
-    Route::post('fonction', [FonctionpublicController::class, 'store']);
-    Route::put('fonction/{id}', [FonctionpublicController::class, 'update']);
-    Route::delete('fonction/{id}', [FonctionpublicController::class, 'destroy']);
-    Route::get('fonctions/restorer', [FonctionpublicController::class, 'restorerAll']);
-    Route::get('fonction/restore/{id}', [FonctionpublicController::class, 'restorer']);
-    Route::get('fonction/search', [FonctionpublicController::class, 'search']);
-
+    
     // Route::post('ajouter',[ArticleController::class,'store'])->name('store');
     // Route::get('article/{article}',[ArticleController::class,'show']);
     // // Route::get('article/edit/{article}',[ArticleController::class,'edit'])->name('edit');
@@ -98,3 +94,14 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 });
+
+// ce bout de code nous permette de renvoyer un message si la route que l'utisateur veut acceder n'existe pas
+Route::fallback(
+    function () {
+        return response()->json(
+            [
+                'message' => 'Nous ne retrouvons pas la page, si l\'erreur persiste, contactez l\'Adminstrateur'
+            ]
+        );
+    }
+);
