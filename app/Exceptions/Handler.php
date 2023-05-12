@@ -2,11 +2,11 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Throwable;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException; 
+use Symfony\Component\HttpKernel\Exception\HttpException;
 class Handler extends ExceptionHandler
 {
     /**
@@ -38,14 +38,25 @@ class Handler extends ExceptionHandler
                 );
             }
         });
-        $this->renderable(function(ModelNotFoundException $e, $request){
+
+        $this->renderable(function(MethodNotAllowedHttpException $e, $request){
             if ($request->is("api/*")) {
                 return response()->json(
                     [
-                        "message"=>"les informations que vous voulez acceder sont introuvables"
+                        "message"=>"la methode que tu evoque ne pas compatible avec cette route"
+                    ],404
+                );
+            }
+        }) ;
+        $this->renderable(function(HttpException $e, $request){
+            if ($request->is("api/*")) {
+                return response()->json(
+                    [
+                        "message"=>"la methode que tu evoque ne pas compatible avec cette route"
                     ],404
                 );
             }
         });
+
     }
 }

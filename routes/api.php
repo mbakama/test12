@@ -21,13 +21,6 @@ use App\Http\Controllers\detailLicenceController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-// Route::get('agents',[AgentController::class,'index']);
-// Route::post('agents',[AgentController::class,'store'])->name('store');
-// Route::get('agents/{id}',[AgentController::class,'show'])->name('show');
-// Route::get('agents/{id}/edit',[AgentController::class,'edit'])->name('edit');
-// Route::put('agents/{id}/edit',[AgentController::class,'update']);
-// Route::delete('agents/{id}/delete', [AgentController::class,'destroy']);
-
 // Routes additionnelles pour les details licences
 route::prefix('details')->group(function () {
     Route::get('/', [detailLicenceController::class, 'index']);
@@ -80,15 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [FonctionpublicController::class, 'update']);
         Route::delete('/{id}', [FonctionpublicController::class, 'destroy']);
         Route::get('/restore/{id}', [FonctionpublicController::class, 'restorer']);
-    }); 
-
-    
-    // Route::post('ajouter',[ArticleController::class,'store'])->name('store');
-    // Route::get('article/{article}',[ArticleController::class,'show']);
-    // // Route::get('article/edit/{article}',[ArticleController::class,'edit'])->name('edit');
-    // Route::put('article/edit/{article}',[ArticleController::class,'update']);
-    // Route::delete('article/{article}',[ArticleController::class,'destroy']);
-    // Route::get('article/restore/{article}',[ArticleController::class,'restore']);
+    });
 
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -100,8 +85,9 @@ Route::fallback(
     function () {
         return response()->json(
             [
-                'message' => 'Nous ne retrouvons pas la page, si l\'erreur persiste, contactez l\'Adminstrateur'
-            ]
+                'error' => 'Nous ne retrouvons pas la page que vous avez demandé, si l\'erreur persiste, contactez l\'Adminstrateur'
+            ],
+            404
         );
     }
 );
