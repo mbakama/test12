@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Fonctionpublic;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\DetailResource;
 use Illuminate\Support\Facades\Validator;
 
@@ -130,9 +131,9 @@ class FonctionpublicController extends Controller
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'cet id nexiste pas'
-            ],
-            404
+                    'message' => 'l\'id n\'existe pas dans notre table'
+                ],
+                404
             );
         }
     }
@@ -181,7 +182,11 @@ class FonctionpublicController extends Controller
             442
             );
         } else {
-            $update = Fonctionpublic::find($id)->update(
+            $update = Fonctionpublic::find($id);
+
+            if ($update) {
+            
+                    $update->update(
                 [
                 "NumMinTravail" => $request->NumMinTravail,
                 "Num" => $request->Num,
@@ -200,7 +205,7 @@ class FonctionpublicController extends Controller
                 "CodeMois" => $request->CodeMois,
                 "DateCreation" => $request->DateCreation,
                 "CoNum" => $request->CoNum,
-                "Status" => $request->Status
+                "Status" => $request->Status,
             ]
             );
 
@@ -208,22 +213,32 @@ class FonctionpublicController extends Controller
                 return response()->json(
                     [
                         'status' => 200,
-                        'message' => 'Vos Données sont enregistrées avec success'
-                ],
-                200
+                        'message' => 'Vos Données ont modifié avec success'
+                    ],
+                    200
                 );
             } else {
                 return response()->json(
                     [
                         'status' => 500,
-                        'message' => 'verifiez vos codes'
-                ],
-                500
+                        'message' => 'il y a une erreur'
+                    ],
+                    500
                 );
             }
-
+        } else {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'l\'id n\'existe pas dans notre table'
+                ],
+                404
+            );
         }
+
     }
+
+}
 
     /**
      * Remove the specified resource from storage.
@@ -233,23 +248,25 @@ class FonctionpublicController extends Controller
         $delete = Fonctionpublic::find($id);
 
         if ($delete) {
-            $delete->delete();
-            return response()->json(
-                [
-                    'status' => 200,
-                    'message' => 'vous avez supprimeé une donnée avec success'
-            ],
-            200
-            );
-        } else {
-            return response()->json(
-                [
-                    'status' => 404,
-                    'message' => 'cet id n\'existe pas'
-            ],
-            404
-            );
-        }
+            
+                $delete->delete();
+
+                return response()->json(
+                    [
+                        'status' => 200,
+                        'message' => 'donnée supprimée avec success'
+                    ],
+                    200
+                );
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'l\'id que vous avez inseré n\'existe pas ou a été effacé'
+                    ],
+                    404
+                );
+            } 
 
     }
     public function restorer($id)
@@ -294,9 +311,9 @@ class FonctionpublicController extends Controller
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'rien a restoré pour le moment'
-            ],
-            404
+                    'message' => 'il se peut que vous ayez déja restoré toutes les données supprimées car nous n\'avons trouvé aucune donnée a restoré'
+                ],
+                404
             );
         }
     }

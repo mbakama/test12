@@ -2,6 +2,7 @@
 
 
 
+use App\Http\Controllers\FonctionpublicController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route; 
 use App\Http\Controllers\FpiController;
@@ -40,6 +41,7 @@ Route::prefix('fonctions')->group(function () {
     Route::get('/', [FonctionpublicController::class, 'index']);
     Route::get('/restorer', [FonctionpublicController::class, 'restorerAll']);
     Route::get('/search', [FonctionpublicController::class, 'search']);
+    Route::get('/all_data',[FonctionpublicController::class,'all_data']);
 });
 Route::get('fonction/{id}', [FonctionpublicController::class, 'show']);
 
