@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Fonctionpublic;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\DetailResource;
 use Illuminate\Support\Facades\Validator;
 
 class FonctionpublicController extends Controller
@@ -17,13 +18,7 @@ class FonctionpublicController extends Controller
         $all = DB::table('fonctionpublics')->get();
 
         if ($all->count() > 0) {
-            return response()->json(
-                [
-                    'status' => 200,
-                    'all' => $all
-            ],
-            200
-            );
+            return DetailResource::collection($all);
         } else {
             return response()->json(
                 [
@@ -37,11 +32,7 @@ class FonctionpublicController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+     */ 
 
     /**
      * Store a newly created resource in storage.
@@ -134,12 +125,7 @@ class FonctionpublicController extends Controller
         $id_data = Fonctionpublic::find($id);
 
         if ($id_data) {
-            return response()->json(
-                [
-                    'status' => 200,
-                    'id_data' => $id_data
-            ]
-            );
+            return new DetailResource($id_data);
         } else {
             return response()->json(
                 [
@@ -154,10 +140,7 @@ class FonctionpublicController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Fonctionpublic $fonctionpublic)
-    {
-        //
-    }
+   
 
     /**
      * Update the specified resource in storage.
@@ -314,6 +297,21 @@ class FonctionpublicController extends Controller
                     'message' => 'rien a restoré pour le moment'
             ],
             404
+            );
+        }
+    }
+    public function all_data()
+    {
+        $query = Fonctionpublic::withTrashed()->get();
+
+        if ($query) {
+            return DetailResource::collection($query);
+        } else {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'il y a une erreur'
+                ]
             );
         }
     }

@@ -105,7 +105,7 @@ class FpiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show($id)
     {
         $data = Detailfp::find($id);
 
@@ -159,24 +159,24 @@ class FpiController extends Controller
 
             if ($update) {
                 if ($update->user_id == Auth::user()->id) {
-                $update->update(
-                    [
-                        'numero' => $request->numero,
-                        'CodeSource' => $request->CodeSource,
-                        'MontantCreditFc' => $request->MontantCreditFc,
-                        'MontantCreditUSD' => $request->MontantCreditUSD,
-                        'Promoteur' => $request->Promoteur,
-                        'AdressPromoteur' => $request->AdressPromoteur,
-                        'observation' => $request->observation,
-                        'telephone' => $request->telephone,
-                        'Annee' => $request->Annee,
-                        'CoNum' => $request->CoNum,
-                        'DateCreation' => $request->DateCreation,
-                        'Status' => $request->Status,
-                        'user_id' => Auth::user()->id
-                    ]
-                );
-              
+                    $update->update(
+                        [
+                            'numero' => $request->numero,
+                            'CodeSource' => $request->CodeSource,
+                            'MontantCreditFc' => $request->MontantCreditFc,
+                            'MontantCreditUSD' => $request->MontantCreditUSD,
+                            'Promoteur' => $request->Promoteur,
+                            'AdressPromoteur' => $request->AdressPromoteur,
+                            'observation' => $request->observation,
+                            'telephone' => $request->telephone,
+                            'Annee' => $request->Annee,
+                            'CoNum' => $request->CoNum,
+                            'DateCreation' => $request->DateCreation,
+                            'Status' => $request->Status,
+                            'user_id' => Auth::user()->id
+                        ]
+                    );
+
                     return response()->json(
                         [
                             'status' => 200,
@@ -213,7 +213,7 @@ class FpiController extends Controller
     {
         $delete = Detailfp::find($id);
 
-        if ($delete) { 
+        if ($delete) {
             if (Auth::user()->id == $delete->user_id) {
                 $delete->delete();
 
@@ -277,8 +277,6 @@ class FpiController extends Controller
     {
         // ce bout de code nous permet de restorer toutes les données qui ont été supprimés
         $restores = Detailfp::onlyTrashed();
-
-
         if ($restores->count() > 0) {
             $restores->restore();
 
@@ -298,43 +296,59 @@ class FpiController extends Controller
         }
 
     }
-    
-    public function search(Request $request)
-    {  
-       $query = Detailfp::query();
-    //ce bout de code nous permet de faire une recherche automatique selon les colonnes que nous avons defini 
-       if ($s = $request->input('search')) {
-          $query->whereRaw("numero LIKE '%".$s."%'")
-            ->orWhereRaw("Annee LIKE '%".$s."%'")
-            ->orWhereRaw("CoNum LIKE '%".$s."%'");
 
-           if($count = count($query->get())>0){
-                return $query->get();
-           } else {
-              return response()->json(
-              [
-                'status'=>404,
-                'message'=>'Desolé, nous n\'avons pas trouvé les données correspondants'
-              ],404  
+    public function all_data()
+    {
+        $query = Detailfp::withTrashed()->get();
+
+        if ($query) {
+            return DetailResource::collection($query);
+        } else {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'il y a une erreur'
+                ]
             );
-           }
-       }
-       //filtrer selon la colonne serie /asc ou desc
-       if ($sort = $request->input('sort')) {
-           $query->orderBy('serie',$sort);
-           return $query->get();
-       }
-    //    pagination 
-       $perPage = 10;
-       $page = request('page',default:1);
-       $total = $query->count();
-       $fetch = $query->offset(( $page-1)*$perPage)->limit($perPage)->get();
-       
-       return [
-            'data'=>$fetch,
-            'total'=>$total,
-            'page'=>$page,
-            'Derniere_page'=>ceil( $total/$perPage)
-       ];
+        }
+    }
+    public function search(Request $request)
+    {
+        $query = Detailfp::query();
+        //ce bout de code nous permet de faire une recherche automatique selon les colonnes que nous avons defini 
+        if ($s = $request->input('search')) {
+            $query->whereRaw("numero LIKE '%" . $s . "%'")
+                ->orWhereRaw("Annee LIKE '%" . $s . "%'")
+                ->orWhereRaw("CoNum LIKE '%" . $s . "%'");
+
+            if ($count = count($query->get()) > 0) {
+                return $query->get();
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
+                    ],
+                    404
+                );
+            }
+        }
+        //filtrer selon la colonne serie /asc ou desc
+        if ($sort = $request->input('sort')) {
+            $query->orderBy('serie', $sort);
+            return $query->get();
+        }
+        //    pagination 
+        $perPage = 10;
+        $page = request('page', default: 1);
+        $total = $query->count();
+        $fetch = $query->offset(($page - 1) * $perPage)->limit($perPage)->get();
+
+        return [
+            'data' => $fetch,
+            'total' => $total,
+            'page' => $page,
+            'Derniere_page' => ceil($total / $perPage)
+        ];
     }
 }

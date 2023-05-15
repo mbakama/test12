@@ -1,14 +1,11 @@
 <?php
 
-use App\Http\Controllers\DetailfpController;
-use App\Http\Controllers\DetailFPIController;
-use App\Http\Controllers\FonctionpublicController;
-use App\Http\Controllers\FpiController;
+
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route; 
+use App\Http\Controllers\FpiController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AgentController;
-use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\detailLicenceController;
 
 /*
@@ -26,8 +23,9 @@ route::prefix('details')->group(function () {
     Route::get('/', [detailLicenceController::class, 'index']);
     Route::get('restore', [detailLicenceController::class, 'restores']);
     Route::get('/search', [detailLicenceController::class, 'search']);
+    Route::get('/all_data',[detailLicenceController::class,'all_data']);
 });
-Route::get('detail/{detail}', [detailLicenceController::class, 'show'])->name('show');
+Route::get('detail/{id}', [detailLicenceController::class, 'show'])->name('show');
 
 // Routes addictionnelles pour les details de la FPI
 Route::prefix('detailfpis')->group(function () {

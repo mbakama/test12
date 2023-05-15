@@ -102,9 +102,9 @@ use Illuminate\Support\Facades\Validator;
     /**
      * Display the specified resource.
      */
-    public function show($detail)
+    public function show($id)
     {
-        $details = DetailLicence::find($detail);
+        $details = DetailLicence::find($id);
 
         if ($details) {
             return new DetailResource($details);
@@ -185,7 +185,12 @@ use Illuminate\Support\Facades\Validator;
                     );
                 }
             } else {
-                return response()->json(['stutus' => 404, 'message' => 'cet id n\'existe pas'],404);
+                return response()->json(
+                    [
+                        'stutus' => 404, 
+                        'message' => 'cet id n\'existe pas'
+                    ],404
+                );
             }
         }
     }
@@ -289,6 +294,26 @@ use Illuminate\Support\Facades\Validator;
             );
         }
 
+    }
+
+    /**
+     * cette fonction return toutes les donnees mais celles qui sont effacées
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function all_data()
+    {
+        $query = DetailLicence::withTrashed()->get();
+
+        if ($query) {
+            return DetailResource::collection($query);
+        } else {
+            return response()->json(
+                [
+                    'status'=>404,
+                    'message'=>'il y a une erreur'
+                ]
+            );
+        }
     }
     /**
      * Summary of search
