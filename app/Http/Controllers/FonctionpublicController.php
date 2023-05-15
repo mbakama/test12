@@ -16,10 +16,13 @@ class FonctionpublicController extends Controller
      */
     public function index()
     {
-        $all = DB::table('fonctionpublics')->get();
+        $all = Fonctionpublic::all();
 
         if ($all->count() > 0) {
-            return DetailResource::collection($all);
+            return [
+                "Nombres des donnees trouvées"=>count($all),
+                "Data"=>DetailResource::collection($all)
+            ];
         } else {
             return response()->json(
                 [
@@ -34,7 +37,14 @@ class FonctionpublicController extends Controller
     /**
      * Show the form for creating a new resource.
      */ 
-
+public function uploader(Request $request)
+{
+    $query = $request->file('file')->store('api_store_data');
+    return [
+        
+        "result"=>$query
+    ];
+}
     /**
      * Store a newly created resource in storage.
      */
@@ -322,7 +332,12 @@ class FonctionpublicController extends Controller
         $query = Fonctionpublic::withTrashed()->get();
 
         if ($query) {
-            return DetailResource::collection($query);
+
+            return [
+                "Nombre de donnees trouvées"=>count($query),
+                "Data"=>DetailResource::collection($query)
+            ]
+            ;
         } else {
             return response()->json(
                 [
@@ -331,5 +346,57 @@ class FonctionpublicController extends Controller
                 ]
             );
         }
+    }
+    public function search(Request $request)
+    {
+        $query = Fonctionpublic::query();
+        //ce bout de code nous permet de faire une recherche automatique selon les colonnes que nous avons defini 
+        if ($s = $request->input('search')) {
+            $query->whereRaw("NomExpatrier LIKE '%" . $s . "%'")
+                ->orWhereRaw("LieuNais LIKE '%" . $s . "%'")
+                ->orWhereRaw("DateNais LIKE '%" . $s . "%'")
+                ->orWhereRaw("Fonction LIKE '%" . $s . "%'")
+                ->orWhereRaw("AdresseAffectation LIKE '%" . $s . "%'")
+                ->orWhereRaw("Annee LIKE '%" . $s . "%'")
+                ->orWhereRaw("DateCreation LIKE '%" . $s . "%'")
+                ->orWhereRaw("CodePays LIKE '%" . $s . "%'")
+                ->orWhereRaw("NumMinTravail LIKE '%" . $s . "%'")
+                ->orWhereRaw("Num LIKE '%" . $s . "%'")
+                ;
+
+            if ($count = count($query->get()) > 0) {
+                return [
+                    "nombre de données trouver"=>count($query->get()),
+                    "Donnees trouvées"=>$query->get()
+                ]
+                
+                ;
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
+                    ],
+                    404
+                );
+            }
+        }
+        //filtrer selon la colonne serie /asc ou desc
+        if ($sort = $request->input('sort')) {
+            $query->orderBy('serie', $sort);
+            return $query->get();
+        }
+        //    pagination 
+        $perPage = 10;
+        $page = request('page', default: 1);
+        $total = $query->count();
+        $fetch = $query->offset(($page - 1) * $perPage)->limit($perPage)->get();
+
+        return [
+            'data' => $fetch,
+            'total' => $total,
+            'page' => $page,
+            'Derniere_page' => ceil($total / $perPage)
+        ];
     }
 }

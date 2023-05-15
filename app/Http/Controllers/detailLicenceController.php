@@ -18,7 +18,10 @@ use Illuminate\Support\Facades\Validator;
         $details = DetailLicence::all();
 
         if ($details->count() > 0) {
-            return DetailResource::collection($details);
+            return [
+                "Nombre des données trouvées"=>count($details),
+                "Data"=>DetailResource::collection($details)
+            ];
         } else {
             return response()->json(
                 [
@@ -305,7 +308,11 @@ use Illuminate\Support\Facades\Validator;
         $query = DetailLicence::withTrashed()->get();
 
         if ($query) {
-            return DetailResource::collection($query);
+            return [
+                "Nombre de donnees trouvées"=>count($query),
+                "Data"=>DetailResource::collection($query)
+            ]
+            ;
         } else {
             return response()->json(
                 [

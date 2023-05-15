@@ -33,6 +33,7 @@ Route::prefix('detailfpis')->group(function () {
     Route::get('/', [FpiController::class, 'index']);
     Route::get('/search', [FpiController::class, 'search']);
     Route::get('/restorer', [FpiController::class, 'restorerAll']);
+    Route::get('/all_data',[FpiController::class,'all_data']);
 });
 Route::get('detailfpi/{id}', [FpiController::class, 'show']);
 
@@ -42,6 +43,7 @@ Route::prefix('fonctions')->group(function () {
     Route::get('/restorer', [FonctionpublicController::class, 'restorerAll']);
     Route::get('/search', [FonctionpublicController::class, 'search']);
     Route::get('/all_data',[FonctionpublicController::class,'all_data']);
+    Route::post('/up',[FonctionpublicController::class,'uploader']);
 });
 Route::get('fonction/{id}', [FonctionpublicController::class, 'show']);
 

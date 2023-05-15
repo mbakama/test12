@@ -22,7 +22,11 @@ class FpiController extends Controller
 
         if ($fetch_data->count() > 0) {
             //ici on fait appel une ressouce que nous avons creer pour nous retourner facilement les infos sous format Json
-            return DetailResource::collection($fetch_data);
+            return [
+                "Nombre des donnees trouvees"=>count($fetch_data),
+                "Data"=> DetailResource::collection($fetch_data)
+            ];
+           
         } else {
             return response()->json(
                 [
@@ -302,7 +306,11 @@ class FpiController extends Controller
         $query = Detailfp::withTrashed()->get();
 
         if ($query) {
-            return DetailResource::collection($query);
+            return [
+                "Nombre de donnees trouvées"=>count($query),
+                "Data"=>DetailResource::collection($query)
+            ]
+            ;
         } else {
             return response()->json(
                 [
@@ -321,9 +329,14 @@ class FpiController extends Controller
                 ->orWhereRaw("Annee LIKE '%" . $s . "%'")
                 ->orWhereRaw("CoNum LIKE '%" . $s . "%'");
 
-            if ($count = count($query->get()) > 0) {
-                return $query->get();
-            } else {
+                if ($count = count($query->get()) > 0) {
+                    return [
+                        "nombre de données trouver"=>count($query->get()),
+                        "Donnees trouvées"=>$query->get()
+                    ]
+                    
+                    ;
+                } else {
                 return response()->json(
                     [
                         'status' => 404,
