@@ -8,19 +8,21 @@ use App\Models\DetailLicence;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
- class detailLicenceController extends Controller
+
+class detailLicenceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $details = DetailLicence::all();
+        $pag = DetailLicence::paginate(4);
+        
 
-        if ($details->count() > 0) {
+        if ($pag->count() > 0) {
             return [
-                "Nombre des données trouvées"=>count($details),
-                "Data"=>DetailResource::collection($details)
+                "Nombre des données trouvées" => count($pag),
+                "Data" => DetailResource::collection($pag)
             ];
         } else {
             return response()->json(
@@ -31,9 +33,29 @@ use Illuminate\Support\Facades\Validator;
                 204
             );
         }
+       
+
+    //  var_dump($sort = request()->query('sort',null)) ;
+
+    //     switch ($sort) {
+    //         case 'desc':
+    //             rsort($details);
+    //             break;
+    //         case 'asc':
+    //             sort($details);
+    //             break;
+    //         default:
+    //             sort($details);
+    //             break;
+    //     }
+    //     foreach ($details as $de) {
+    //         return DetailResource::collection($de);
+    //     }
+
+
 
     }
- /**
+    /**
      * Summary of store
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -41,7 +63,7 @@ use Illuminate\Support\Facades\Validator;
     public function store(Request $request)
     {
         $detail = Validator::make(
-           //
+            //
             $request->all(),
             [
                 'CodeDetailLicence' => 'required|numeric|min:5',
@@ -54,8 +76,8 @@ use Illuminate\Support\Facades\Validator;
                 'unitStat' => 'required',
                 'DateSaisie' => 'required'
             ],
-         
-        ); 
+
+        );
         if ($detail->fails()) {
             return response()->json(
                 [
@@ -118,8 +140,8 @@ use Illuminate\Support\Facades\Validator;
             ], 404);
         }
 
-    } 
- 
+    }
+
     /**
      * Summary of update
      * @param \Illuminate\Http\Request $request
@@ -190,15 +212,16 @@ use Illuminate\Support\Facades\Validator;
             } else {
                 return response()->json(
                     [
-                        'stutus' => 404, 
+                        'stutus' => 404,
                         'message' => 'cet id n\'existe pas'
-                    ],404
+                    ],
+                    404
                 );
             }
         }
     }
 
-   
+
     /**
      * Summary of destroy
      * @param mixed $delete
@@ -309,15 +332,15 @@ use Illuminate\Support\Facades\Validator;
 
         if ($query) {
             return [
-                "Nombre de donnees trouvées"=>count($query),
-                "Data"=>DetailResource::collection($query)
+                "Nombre de donnees trouvées" => count($query),
+                "Data" => DetailResource::collection($query)
             ]
             ;
         } else {
             return response()->json(
                 [
-                    'status'=>404,
-                    'message'=>'il y a une erreur'
+                    'status' => 404,
+                    'message' => 'il y a une erreur'
                 ]
             );
         }
@@ -328,41 +351,46 @@ use Illuminate\Support\Facades\Validator;
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse|array
      */
     public function search(Request $request)
-    {  
-       $query = DetailLicence::query();
-    //ce bout de code nous permet de faire une recherche automatique selon les colonnes que nous avons defini 
-       if ($s = $request->input('search')) {
-          $query->whereRaw("CodeDetailLicence LIKE '%".$s."%'")
-            ->orWhereRaw("serie LIKE '%".$s."%'")
-            ->orWhereRaw("codeDouane LIKE '%".$s."%'");
+    {
+        $query = DetailLicence::query();
+        //ce bout de code nous permet de faire une recherche automatique selon les colonnes que nous avons defini 
+        if ($s = $request->input('search')) {
+            $query->whereRaw("CodeDetailLicence LIKE '%" . $s . "%'")
+                ->orWhereRaw("serie LIKE '%" . $s . "%'")
+                ->orWhereRaw("codeDouane LIKE '%" . $s . "%'");
 
-           if($count = count($query->get())>0){
-                return $query->get();
-           } else {
-              return response()->json(
-              [
-                'status'=>404,
-                'message'=>'Desolé, nous n\'avons pas trouvé les données correspondants'
-              ],404  
-            );
-           }
-       }
-       //filtrer selon la colonne serie /asc ou desc
-       if ($sort = $request->input('sort')) {
-           $query->orderBy('serie',$sort);
-           return $query->get();
-       }
-    //    pagination 
-       $perPage = 10;
-       $page = request('page',default:1);
-       $total = $query->count();
-       $fetch = $query->offset(( $page-1)*$perPage)->limit($perPage)->get();
-       
-       return [
-            'data'=>$fetch,
-            'total'=>$total,
-            'page'=>$page,
-            'Derniere_page'=>ceil( $total/$perPage)
-       ];
+            if ($count = count($query->get()) > 0) {
+                return [
+                    "nombre de données trouver" => count($query->get()),
+                    "Donnees trouvées" => $query->get()
+                ] 
+                ;
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
+                    ],
+                    404
+                );
+            }
+        }
+         // //filtrer selon la colonne serie /asc ou desc
+        if ($sort = $request->input('sort')) {
+            $query->orderBy('serie', $sort);
+            return $query->get();
+        }
+        //    pagination 
+        // $perPage = 10;
+        // $page = request('page', default: 1);
+        // $total = $query->count();
+        // $fetch = $query->offset(($page - 1) * $perPage)->limit($perPage)->get();
+
+        // return [
+        //     'data' => $fetch,
+        //     'total' => $total,
+        //     'page' => $page,
+        //     'Derniere_page' => ceil($total / $perPage)
+        // ];
     }
-} 
+}
