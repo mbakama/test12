@@ -15,7 +15,38 @@ class FonctionpublicController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    { 
+        $query = Fonctionpublic::query();
+        if ($s = request('search')) {
+            $query->whereRaw("NomExpatrier LIKE '%" . $s . "%'")
+                ->orWhereRaw("LieuNais LIKE '%" . $s . "%'")
+                ->orWhereRaw("DateNais LIKE '%" . $s . "%'")
+                ->orWhereRaw("Fonction LIKE '%" . $s . "%'")
+                ->orWhereRaw("AdresseAffectation LIKE '%" . $s . "%'")
+                ->orWhereRaw("Annee LIKE '%" . $s . "%'")
+                ->orWhereRaw("DateCreation LIKE '%" . $s . "%'")
+                ->orWhereRaw("CodePays LIKE '%" . $s . "%'")
+                ->orWhereRaw("NumMinTravail LIKE '%" . $s . "%'")
+                ->orWhereRaw("Num LIKE '%" . $s . "%'")
+                ;
+
+            if ($query->count() > 0) {
+                return [
+                    "nombre de données trouver"=>count($query->get()),
+                    "Donnees trouvées"=>$query->get()
+                ]
+                
+                ;
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
+                    ],
+                    404
+                );
+            }
+        }
         $sort = request('direction','asc');
 
         if ($sort=="asc") {
