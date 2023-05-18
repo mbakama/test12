@@ -37,7 +37,8 @@ class FonctionpublicController extends Controller
       
 
         $query= Fonctionpublic::query();
-       
+       $perPage = 1;
+       $page = request('page',1);
         if ($s = request('search')) {
             $query->whereRaw("NomExpatrier LIKE '%" . $s . "%'")
                 ->orWhereRaw("LieuNais LIKE '%" . $s . "%'")
@@ -50,11 +51,14 @@ class FonctionpublicController extends Controller
                 ->orWhereRaw("NumMinTravail LIKE '%" . $s . "%'")
                 ->orWhereRaw("Num LIKE '%" . $s . "%'")
                 ;
-
-            if ($query->count() > 0) {
+            $result = $query->offset(($page-1)*$perPage)->limit($perPage)->get();
+            if ($total = $query->count() > 0) {
                 return [
                     "nombre de données trouver"=>count($query->get()),
-                    "Donnees trouvées"=>$query->get()
+                    "Donnees trouvées"=>$query->get(),
+                    "current_page"=>$page,
+                    "last_page"=>ceil($page/$perPage),
+                    'items'=>$result
                 ]
 
                 ;
@@ -113,13 +117,7 @@ class FonctionpublicController extends Controller
             404
             );
 
-        }
-
-        $fetch_all = Fonctionpublic::all();
-        
-        if ($s = request('all_data')) {
-            return "ffff";
-        }
+        } 
         
 
     }
