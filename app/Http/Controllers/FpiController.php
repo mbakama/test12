@@ -18,26 +18,24 @@ class FpiController extends Controller
      */
     public function index()
     {
-        $fetch_data = Detailfp::all();
+        $query = Detailfp::filter();
 
-        if ($fetch_data->count() > 0) {
-            //ici on fait appel une ressouce que nous avons creer pour nous retourner facilement les infos sous format Json
+        if (count($query->get()) > 0) {
+
             return [
-                "Nombre des donnees trouvees"=>count($fetch_data),
-                "Data"=> DetailResource::collection($fetch_data)
+                "nombre de données trouver" => count($query->get()),
+                "Donnees trouvées" => $query->get()
             ];
-           
         } else {
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'il n\'y a pas des données dans la table'
+                    'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
                 ],
                 404
             );
         }
     }
-
     /**
      * Store a newly created resource in storage.
      */

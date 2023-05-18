@@ -16,100 +16,111 @@ class FonctionpublicController extends Controller
      */
     public function index()
     {
-        $query = Fonctionpublic::filter();
+        // $query = Fonctionpublic::filter();
 
-        if (count($query->get()) > 0) {
+        // if (count($query->get()) > 0) {
 
-            return [
-                "nombre de données trouver" => count($query->get()),
-                "Donnees trouvées" => $query->get()
-            ];
-        } else {
-            return response()->json(
-                [
-                    'status' => 404,
-                    'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
-                ],
-                404
-            );
-        }
-        // $query = Fonctionpublic::query();
-        // if ($s = request('search')) {
-        //     $query->whereRaw("NomExpatrier LIKE '%" . $s . "%'")
-        //         ->orWhereRaw("LieuNais LIKE '%" . $s . "%'")
-        //         ->orWhereRaw("DateNais LIKE '%" . $s . "%'")
-        //         ->orWhereRaw("Fonction LIKE '%" . $s . "%'")
-        //         ->orWhereRaw("AdresseAffectation LIKE '%" . $s . "%'")
-        //         ->orWhereRaw("Annee LIKE '%" . $s . "%'")
-        //         ->orWhereRaw("DateCreation LIKE '%" . $s . "%'")
-        //         ->orWhereRaw("CodePays LIKE '%" . $s . "%'")
-        //         ->orWhereRaw("NumMinTravail LIKE '%" . $s . "%'")
-        //         ->orWhereRaw("Num LIKE '%" . $s . "%'")
-        //         ;
-
-        //     if ($query->count() > 0) {
-        //         return [
-        //             "nombre de données trouver"=>count($query->get()),
-        //             "Donnees trouvées"=>$query->get()
-        //         ]
-
-        //         ;
-        //     } else {
-        //         return response()->json(
-        //             [
-        //                 'status' => 404,
-        //                 'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
-        //             ],
-        //             404
-        //         );
-        //     }
-        // }
-        // $sort = request('direction','asc');
-
-        // if ($sort=="asc") {
-        //     $all = Fonctionpublic::orderBy('id',$sort)->get();
-
-        //     if ($all->count() > 0) {
-        //         return [
-        //             "Nombres des donnees trouvées"=>count($all),
-        //             "Data"=>DetailResource::collection($all)
-        //         ];
-        //     } else {
-        //         return response()->json(
-        //             [
-        //                 'status' => 404,
-        //                 'message' => 'la table est vide'
-        //         ],
-        //         404
-        //         );
-        //     }
-        // } elseif ($sort=="desc") {
-        //     $all = Fonctionpublic::orderBy('id',$sort)->paginate(10);
-
-        //     if ($all->count() > 0) {
-        //         return [
-        //             "Nombres des donnees trouvées"=>count($all),
-        //             "Data"=>DetailResource::collection($all)
-        //         ];
-        //     } else {
-        //         return response()->json(
-        //             [
-        //                 'status' => 404,
-        //                 'message' => 'la table est vide'
-        //         ],
-        //         404
-        //         );
-        //     }
-        // } else{
+        //     return [
+        //         "nombre de données trouver" => count($query->get()),
+        //         "Donnees trouvées" => $query->get()
+        //     ];
+        // } else {
         //     return response()->json(
         //         [
         //             'status' => 404,
-        //             'message' => 'Desolé ! Seuls les paramettres \'asc\' et \'desc\' sont autorisés'
-        //     ],
-        //     404
+        //             'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
+        //         ],
+        //         404
         //     );
-
         // }
+
+      
+
+        $query= Fonctionpublic::query();
+       
+        if ($s = request('search')) {
+            $query->whereRaw("NomExpatrier LIKE '%" . $s . "%'")
+                ->orWhereRaw("LieuNais LIKE '%" . $s . "%'")
+                ->orWhereRaw("DateNais LIKE '%" . $s . "%'")
+                ->orWhereRaw("Fonction LIKE '%" . $s . "%'")
+                ->orWhereRaw("AdresseAffectation LIKE '%" . $s . "%'")
+                ->orWhereRaw("Annee LIKE '%" . $s . "%'")
+                ->orWhereRaw("DateCreation LIKE '%" . $s . "%'")
+                ->orWhereRaw("CodePays LIKE '%" . $s . "%'")
+                ->orWhereRaw("NumMinTravail LIKE '%" . $s . "%'")
+                ->orWhereRaw("Num LIKE '%" . $s . "%'")
+                ;
+
+            if ($query->count() > 0) {
+                return [
+                    "nombre de données trouver"=>count($query->get()),
+                    "Donnees trouvées"=>$query->get()
+                ]
+
+                ;
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
+                    ],
+                    404
+                );
+            }
+        }
+        $sort = request('sort','asc');
+
+        if ($sort=="asc") {
+            $all = Fonctionpublic::orderBy('id',$sort)->get();
+
+            if ($all->count() > 0) {
+                return [
+                    "Nombres des donnees trouvées"=>count($all),
+                    "Data"=>DetailResource::collection($all)
+                ];
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'la table est vide'
+                ],
+                404
+                );
+            }
+        } elseif ($sort=="desc") {
+            $all = Fonctionpublic::orderBy('id',$sort)->paginate(10);
+
+            if ($all->count() > 0) {
+                return [
+                    "Nombres des donnees trouvées"=>count($all),
+                    "Data"=>DetailResource::collection($all)
+                ];
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'la table est vide'
+                ],
+                404
+                );
+            }
+        } else{
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Desolé ! Seuls les paramettres \'asc\' et \'desc\' sont autorisés'
+            ],
+            404
+            );
+
+        }
+
+        $fetch_all = Fonctionpublic::all();
+        
+        if ($s = request('all_data')) {
+            return "ffff";
+        }
+        
 
     }
 
@@ -428,39 +439,7 @@ class FonctionpublicController extends Controller
     }
     public function search(Request $request)
     {
-        $query = Fonctionpublic::query();
-        //ce bout de code nous permet de faire une recherche automatique selon les colonnes que nous avons defini 
-        if ($s = $request->input('search')) {
-            $query->whereRaw("NomExpatrier LIKE '%" . $s . "%'")
-                ->orWhereRaw("LieuNais LIKE '%" . $s . "%'")
-                ->orWhereRaw("DateNais LIKE '%" . $s . "%'")
-                ->orWhereRaw("Fonction LIKE '%" . $s . "%'")
-                ->orWhereRaw("AdresseAffectation LIKE '%" . $s . "%'")
-                ->orWhereRaw("Annee LIKE '%" . $s . "%'")
-                ->orWhereRaw("DateCreation LIKE '%" . $s . "%'")
-                ->orWhereRaw("CodePays LIKE '%" . $s . "%'")
-                ->orWhereRaw("NumMinTravail LIKE '%" . $s . "%'")
-                ->orWhereRaw("Num LIKE '%" . $s . "%'")
-            ;
-
-            if ($count = count($query->get()) > 0) {
-                return [
-                    "nombre de données trouver" => count($query->get()),
-                    "Donnees trouvées" => $query->get()
-                ]
-
-                ;
-            } else {
-                return response()->json(
-                    [
-                        'status' => 404,
-                        'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
-                    ],
-                    404
-                );
-            }
-        }
-
+       $query = Fonctionpublic::all();
         //    pagination 
         $perPage = 10;
         $page = request('page', default: 1);

@@ -32,9 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/detail/{id}', [detailLicenceController::class, 'update']);
     Route::delete('/detail/{id}', [detailLicenceController::class, 'destroy']);
 
-    Route::get('reconveries', [detailLicenceController::class, 'restores']);
-    Route::get('/recherche', [detailLicenceController::class, 'search']);
-    Route::get('/all_data', [detailLicenceController::class, 'all_data']);
+    Route::get('reconveries', [detailLicenceController::class, 'restores']); 
+    Route::get('/all_data_licence', [detailLicenceController::class, 'all_data']);
     Route::get('/reconvery/{id}', [detailLicenceController::class, 'restore']);
 
     // Routes addictionnelles pour les details de la FPI
@@ -46,9 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/detailfpi/{id}', [FpiController::class, 'destroy']);
 
     Route::get('/reconverys', [FpiController::class, 'restorerAll']);
-    Route::get('/reconvery/{id}', [FpiController::class, 'restorer']);
-    Route::get('/recherche', [FpiController::class, 'search']);
-    Route::get('/all_data', [FpiController::class, 'all_data']);
+    Route::get('/reconvery/{id}', [FpiController::class, 'restorer']); 
+    Route::get('/all_data_fpi', [FpiController::class, 'all_data']);
 
     //addictionnelles de route pour les donnees du Ministere du travail 
 
@@ -59,9 +57,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/fonction/{id}', [FonctionpublicController::class, 'destroy']);
 
     Route::get('/reconvery/{id}', [FonctionpublicController::class, 'restorer']);
-    Route::get('/reconverys', [FonctionpublicController::class, 'restorerAll']);
-    Route::get('/recherche', [FonctionpublicController::class, 'search']);
-    Route::get('/all_data', [FonctionpublicController::class, 'all_data']);
+    Route::get('/reconverys', [FonctionpublicController::class, 'restorerAll']); 
+    Route::get('/all_data_travail', [FonctionpublicController::class, 'all_data']);
 
     Route::post('/up', [FonctionpublicController::class, 'uploader']);
     Route::get('/user', function (Request $request) {

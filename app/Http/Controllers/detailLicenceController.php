@@ -16,21 +16,38 @@ class detailLicenceController extends Controller
      */
     public function index()
     {
-        $pag = DetailLicence::paginate(4); 
-        if ($pag->count() > 0) {
+        $query = DetailLicence::filter();
+        
+        if (count($query->get()) > 0) {
+
             return [
-                "Nombre des données trouvées" => count($pag),
-                "Data" => DetailResource::collection($pag)
+                "nombre de données trouver" => count($query->get()),
+                "Donnees trouvées" => $query->get()
             ];
         } else {
             return response()->json(
                 [
-                    'status' => 204,
-                    'message' => 'pas des données disponibles'
+                    'status' => 404,
+                    'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
                 ],
-                204
+                404
             );
         }
+        // $pag = DetailLicence::paginate(4); 
+        // if ($pag->count() > 0) {
+        //     return [
+        //         "Nombre des données trouvées" => count($pag),
+        //         "Data" => DetailResource::collection($pag)
+        //     ];
+        // } else {
+        //     return response()->json(
+        //         [
+        //             'status' => 204,
+        //             'message' => 'pas des données disponibles'
+        //         ],
+        //         204
+        //     );
+        // }
        
 
     //  var_dump($sort = request()->query('sort',null)) ;
