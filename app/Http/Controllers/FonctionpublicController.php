@@ -16,22 +16,53 @@ class FonctionpublicController extends Controller
      */
     public function index()
     {
-        $all = Fonctionpublic::all();
+        $sort = request('direction','asc');
 
-        if ($all->count() > 0) {
-            return [
-                "Nombres des donnees trouvées"=>count($all),
-                "Data"=>DetailResource::collection($all)
-            ];
-        } else {
+        if ($sort=="asc") {
+            $all = Fonctionpublic::orderBy('id',$sort)->get();
+
+            if ($all->count() > 0) {
+                return [
+                    "Nombres des donnees trouvées"=>count($all),
+                    "Data"=>DetailResource::collection($all)
+                ];
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'la table est vide'
+                ],
+                404
+                );
+            }
+        } elseif ($sort=="desc") {
+            $all = Fonctionpublic::orderBy('id',$sort)->paginate(10);
+
+            if ($all->count() > 0) {
+                return [
+                    "Nombres des donnees trouvées"=>count($all),
+                    "Data"=>DetailResource::collection($all)
+                ];
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'la table est vide'
+                ],
+                404
+                );
+            }
+        } else{
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'la table est vide'
+                    'message' => 'Desolé ! Seuls les paramettres \'asc\' et \'desc\' sont autorisés'
             ],
             404
             );
+           
         }
+       
     }
 
     /**
@@ -381,11 +412,7 @@ public function uploader(Request $request)
                 );
             }
         }
-        //filtrer selon la colonne serie /asc ou desc
-        if ($sort = $request->input('sort')) {
-            $query->orderBy('serie', $sort);
-            return $query->get();
-        }
+       
         //    pagination 
         $perPage = 10;
         $page = request('page', default: 1);

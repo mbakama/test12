@@ -16,9 +16,7 @@ class detailLicenceController extends Controller
      */
     public function index()
     {
-        $pag = DetailLicence::paginate(4);
-        
-
+        $pag = DetailLicence::paginate(4); 
         if ($pag->count() > 0) {
             return [
                 "Nombre des données trouvées" => count($pag),
