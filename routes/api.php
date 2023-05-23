@@ -2,6 +2,7 @@
 
 
 
+use App\Http\Controllers\DetailDGMController;
 use App\Http\Controllers\FonctionpublicController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,41 +27,49 @@ Route::post('login', [UserController::class, 'login'])->name('login');
 
 // Routes additionnelles pour les details licences
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/details', [detailLicenceController::class, 'index']);
-    Route::get('/detail/{id}', [detailLicenceController::class, 'show'])->name('show');
+    Route::get('/details', [detailLicenceController::class, 'index']); 
     Route::post('/detail', [detailLicenceController::class, 'store']);
+    Route::get('/detail/{id}', [detailLicenceController::class, 'show']);
     Route::put('/detail/{id}', [detailLicenceController::class, 'update']);
     Route::delete('/detail/{id}', [detailLicenceController::class, 'destroy']);
 
-    Route::get('reconveries', [detailLicenceController::class, 'restores']); 
+    Route::get('reconveries', [detailLicenceController::class, 'restores']);
     Route::get('/all_data_licence', [detailLicenceController::class, 'all_data']);
     Route::get('/reconvery/{id}', [detailLicenceController::class, 'restore']);
 
     // Routes addictionnelles pour les details de la FPI
 
-    Route::get('/detailfpis', [FpiController::class, 'index']);
-    Route::get('/detailfpi/{id}', [FpiController::class, 'show']);
+    Route::get('/detailfpis', [FpiController::class, 'index']); 
     Route::post('/detailfpi', [FpiController::class, 'store']);
+    Route::get('/detailfpi/{id}', [FpiController::class, 'show']);
     Route::put('/detailfpi/{id}', [FpiController::class, 'update']);
     Route::delete('/detailfpi/{id}', [FpiController::class, 'destroy']);
 
     Route::get('/reconverys', [FpiController::class, 'restorerAll']);
-    Route::get('/reconvery/{id}', [FpiController::class, 'restorer']); 
+    Route::get('/reconvery/{id}', [FpiController::class, 'restorer']);
     Route::get('/all_data_fpi', [FpiController::class, 'all_data']);
 
     //addictionnelles de route pour les donnees du Ministere du travail 
 
-    Route::get('/fonctions', [FonctionpublicController::class, 'index']);
-    Route::get('/fonction/{id}', [FonctionpublicController::class, 'show']);
+    Route::get('/fonctions', [FonctionpublicController::class, 'index']); 
     Route::post('/fonction', [FonctionpublicController::class, 'store']);
+    Route::get('/fonction/{id}', [FonctionpublicController::class, 'show']);
     Route::put('/fonction/{id}', [FonctionpublicController::class, 'update']);
     Route::delete('/fonction/{id}', [FonctionpublicController::class, 'destroy']);
 
     Route::get('/reconvery/{id}', [FonctionpublicController::class, 'restorer']);
-    Route::get('/reconverys', [FonctionpublicController::class, 'restorerAll']); 
+    Route::get('/reconverys', [FonctionpublicController::class, 'restorerAll']);
     Route::get('/all_data_travail', [FonctionpublicController::class, 'all_data']);
 
-    Route::post('/up', [FonctionpublicController::class, 'uploader']);
+    // creation d'un api avec la source de donnees de GDM
+
+    Route::get('/detaildgms',[ DetailDGMController::class, 'index']);
+    Route::post('/detaildgm',[DetailDGMController::class,'store']);
+    Route::get('/detaildgm/{id}',[DetailDGMController::class,'show']);
+    Route::patch('/detaildgm/{id}',[DetailDGMController::class,'update']);
+    Route::delete('/detaildgm/{id}',[DetailDGMController::class,'destroy']);
+
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });

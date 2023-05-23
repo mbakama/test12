@@ -14,7 +14,7 @@ class FonctionpublicController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // $query = Fonctionpublic::filter();
 
@@ -32,13 +32,11 @@ class FonctionpublicController extends Controller
         //         ],
         //         404
         //     );
-        // }
+        // } 
 
-      
-
-        $query= Fonctionpublic::query();
-       $perPage = 1;
-       $page = request('page',1);
+        $query = Fonctionpublic::query();
+        $perPage = 1;
+        $page = $request->input('page', 1);
         if ($s = request('search')) {
             $query->whereRaw("NomExpatrier LIKE '%" . $s . "%'")
                 ->orWhereRaw("LieuNais LIKE '%" . $s . "%'")
@@ -50,18 +48,16 @@ class FonctionpublicController extends Controller
                 ->orWhereRaw("CodePays LIKE '%" . $s . "%'")
                 ->orWhereRaw("NumMinTravail LIKE '%" . $s . "%'")
                 ->orWhereRaw("Num LIKE '%" . $s . "%'")
-                ;
-            $result = $query->offset(($page-1)*$perPage)->limit($perPage)->get();
+            ;
+            $result = $query->offset(($page - 1) * $perPage)->limit($perPage)->get();
             if ($total = $query->count() > 0) {
                 return [
-                    "nombre de données trouver"=>count($query->get()),
-                    "Donnees trouvées"=>$query->get(),
-                    "current_page"=>$page,
-                    "last_page"=>ceil($page/$perPage),
-                    'items'=>$result
-                ]
-
-                ;
+                    "nombre de données trouver" => count($query->get()),
+                    "Donnees trouvées" => $query->get(),
+                    "current_page" => $page,
+                    "last_page" => ceil($page / $perPage),
+                    'items' => $result
+                ] ;
             } else {
                 return response()->json(
                     [
@@ -72,53 +68,53 @@ class FonctionpublicController extends Controller
                 );
             }
         }
-        $sort = request('sort','asc');
+        $sort = request('sort', 'asc');
 
-        if ($sort=="asc") {
-            $all = Fonctionpublic::orderBy('id',$sort)->get();
+        if ($sort == "asc") {
+            $all = Fonctionpublic::orderBy('id', $sort)->get();
 
             if ($all->count() > 0) {
                 return [
-                    "Nombres des donnees trouvées"=>count($all),
-                    "Data"=>DetailResource::collection($all)
+                    "Nombres des donnees trouvées" => count($all),
+                    "Data" => DetailResource::collection($all)
                 ];
             } else {
                 return response()->json(
                     [
                         'status' => 404,
                         'message' => 'la table est vide'
-                ],
-                404
+                    ],
+                    404
                 );
             }
-        } elseif ($sort=="desc") {
-            $all = Fonctionpublic::orderBy('id',$sort)->paginate(10);
+        } elseif ($sort == "desc") {
+            $all = Fonctionpublic::orderBy('id', $sort)->paginate(10);
 
             if ($all->count() > 0) {
                 return [
-                    "Nombres des donnees trouvées"=>count($all),
-                    "Data"=>DetailResource::collection($all)
+                    "Nombres des donnees trouvées" => count($all),
+                    "Data" => DetailResource::collection($all)
                 ];
             } else {
                 return response()->json(
                     [
                         'status' => 404,
                         'message' => 'la table est vide'
-                ],
-                404
+                    ],
+                    404
                 );
             }
-        } else{
+        } else {
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'Desolé ! Seuls les paramettres \'asc\' et \'desc\' sont autorisés'
-            ],
-            404
+                    'message' => 'Desolé ! Seuls les arguments \'asc\' et \'desc\' sont autorisés'
+                ],
+                404
             );
 
-        } 
-        
+        }
+
 
     }
 
@@ -235,13 +231,7 @@ class FonctionpublicController extends Controller
             );
         }
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-
-
-    /**
+ /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
@@ -437,7 +427,7 @@ class FonctionpublicController extends Controller
     }
     public function search(Request $request)
     {
-       $query = Fonctionpublic::all();
+        $query = Fonctionpublic::all();
         //    pagination 
         $perPage = 10;
         $page = request('page', default: 1);

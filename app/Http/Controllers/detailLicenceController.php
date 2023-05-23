@@ -149,10 +149,11 @@ class detailLicenceController extends Controller
         if ($details) {
             return new DetailResource($details);
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'statut' => 404,
                 'message' => 'cet id n\'existe pas ou a été supprimé'
-            ], 404);
+                ], 404);
         }
 
     }
