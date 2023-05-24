@@ -18,6 +18,34 @@ class FpiController extends Controller
      */
     public function index()
     {
+        
+        // ce bout de code nous aide a restore une donnée a partir de l'idee fourni par l'utilisateur
+        // dans l'url vous pouvez ecrire comme params detailgdms?restore=1
+        if ($r = request('restore')) {
+       
+            $data = Detailfp::withTrashed()->find($r); 
+            if ($data && $data->trashed()) {
+                $data->restore();
+    
+                return response()->json([
+                    'status' => 200,
+                    'message' =>
+                    'felicitation vous avez restoré un enregistrement'
+                ], 200);
+            } else {
+                if (isset($data->id)) {
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'cette donnée a été déja restorée'
+                    ], 500);
+                } else {
+                    return response()->json([
+                        'status' => 404,
+                        'message' => 'cet id n\'existe pas'
+                    ], 404);
+                }
+            }
+        }
         $query = Detailfp::filter();
 
         if (count($query->get()) > 0) {

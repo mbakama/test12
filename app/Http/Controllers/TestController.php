@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Test;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TestController extends Controller
@@ -14,11 +15,78 @@ class TestController extends Controller
      */
     public function index()
     {
-        $all = Test::paginate(5);
+        // $all = Test::paginate(5);
 
-        return json_encode([
-            "data"=>$all
-        ]);
+        // return json_encode([
+        //     "data"=>$all
+        // ]);
+   
+        $query = Test::query(); 
+        if ($s = request('search')) {
+            $query->whereRaw("description LIKE '%" . $s . "%'"); 
+            if ($query->count() > 0) {
+                return [
+                    "nombre de données trouver" => count($query->get()),
+                    "Donnees trouvées" => $query->get() 
+                ] ;
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'Desolé, nous n\'avons pas trouvé les données correspondants'
+                    ],
+                    404
+                );
+            }
+        }
+        $sort = request('sort', 'asc');
+
+        if ($sort == "asc") {
+            $all = Test::orderBy('id', $sort)->get();
+
+            if ($all->count() > 0) {
+                return [
+                    "Nombres des donnees trouvées" => count($all),
+                    "Data" => Test::collection($all)->paginate(5)
+                ];
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'la table est vide'
+                    ],
+                    404
+                );
+            }
+        } elseif ($sort == "desc") {
+        
+            $all = DB::table('tests')->orderBy('id', $sort)->get();
+
+            if (count($all) > 0) {
+                return [
+                    "Nombres des données trouvées" => count($all),
+                    "Data" => $all->paginate(5)
+                ];
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'la table est vide'
+                    ],
+                    404
+                );
+            }
+        } else {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Desolé ! Seuls les arguments \'asc\' et \'desc\' sont autorisés'
+                ],
+                404
+            );
+
+        }
+
     }
 
     /**

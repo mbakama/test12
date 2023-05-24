@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
 
 class DetailDgm extends Model
 {
-    use HasFactory, FilterQueryString;
+    use HasFactory, SoftDeletes, FilterQueryString;
     protected $fillable = [
         "NumDGM",
         "Num",
@@ -48,4 +49,18 @@ class DetailDgm extends Model
         "Statut",
         "Annee"
     ];
+    public function by($query, $value)
+    { 
+            return $query->where('NumDGM', $value)
+            ->orWhere('Num', $value)
+            ->orWhere('Nom', $value)
+            ->orWhere('Postnon', $value)
+            ->orWhere('Sexe', $value)
+            ->orWhere('EtatCivil', $value)
+            ->orWhere('CodePays', $value)
+            ->orWhere('DateNais', $value)
+            ->orWhere('Profession', $value);
+        
+         
+    }
 }

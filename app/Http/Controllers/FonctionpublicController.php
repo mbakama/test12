@@ -14,7 +14,7 @@ class FonctionpublicController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
         // $query = Fonctionpublic::filter();
 
@@ -34,9 +34,7 @@ class FonctionpublicController extends Controller
         //     );
         // } 
 
-        $query = Fonctionpublic::query();
-        $perPage = 1;
-        $page = $request->input('page', 1);
+        $query = Fonctionpublic::query(); 
         if ($s = request('search')) {
             $query->whereRaw("NomExpatrier LIKE '%" . $s . "%'")
                 ->orWhereRaw("LieuNais LIKE '%" . $s . "%'")
@@ -49,14 +47,12 @@ class FonctionpublicController extends Controller
                 ->orWhereRaw("NumMinTravail LIKE '%" . $s . "%'")
                 ->orWhereRaw("Num LIKE '%" . $s . "%'")
             ;
-            $result = $query->offset(($page - 1) * $perPage)->limit($perPage)->get();
-            if ($total = $query->count() > 0) {
+            
+            if ($query->count() > 0) {
                 return [
                     "nombre de données trouver" => count($query->get()),
                     "Donnees trouvées" => $query->get(),
-                    "current_page" => $page,
-                    "last_page" => ceil($page / $perPage),
-                    'items' => $result
+                    
                 ] ;
             } else {
                 return response()->json(
@@ -76,7 +72,7 @@ class FonctionpublicController extends Controller
             if ($all->count() > 0) {
                 return [
                     "Nombres des donnees trouvées" => count($all),
-                    "Data" => DetailResource::collection($all)
+                    "Data" => DetailResource::collection($all)->paginate(5)
                 ];
             } else {
                 return response()->json(
@@ -88,12 +84,12 @@ class FonctionpublicController extends Controller
                 );
             }
         } elseif ($sort == "desc") {
-            $all = Fonctionpublic::orderBy('id', $sort)->paginate(10);
+            $all = DB::table('fonctionpublics')->orderBy('id', $sort)->get();
 
-            if ($all->count() > 0) {
+            if (count($all) > 0) {
                 return [
-                    "Nombres des donnees trouvées" => count($all),
-                    "Data" => DetailResource::collection($all)
+                    "Nombres des données trouvées" => count($all),
+                    "Data" => $all->paginate(5)
                 ];
             } else {
                 return response()->json(
@@ -113,6 +109,34 @@ class FonctionpublicController extends Controller
                 404
             );
 
+        }
+
+        // ce bout de code nous aide a restore une donnée a partir de l'idee fourni par l'utilisateur
+        // dans l'url vous pouvez ecrire comme params detailgdms?restore=1
+        if ($r = request('restore')) {
+       
+            $data = Fonctionpublic::withTrashed()->find($r); 
+            if ($data && $data->trashed()) {
+                $data->restore();
+    
+                return response()->json([
+                    'status' => 200,
+                    'message' =>
+                    'felicitation vous avez restoré un enregistrement'
+                ], 200);
+            } else {
+                if (isset($data->id)) {
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'cette donnée a été déja restorée'
+                    ], 500);
+                } else {
+                    return response()->json([
+                        'status' => 404,
+                        'message' => 'cet id n\'existe pas'
+                    ], 404);
+                }
+            }
         }
 
 
@@ -425,20 +449,5 @@ class FonctionpublicController extends Controller
             );
         }
     }
-    public function search(Request $request)
-    {
-        $query = Fonctionpublic::all();
-        //    pagination 
-        $perPage = 10;
-        $page = request('page', default: 1);
-        $total = $query->count();
-        $fetch = $query->offset(($page - 1) * $perPage)->limit($perPage)->get();
-
-        return [
-            'data' => $fetch,
-            'total' => $total,
-            'page' => $page,
-            'Derniere_page' => ceil($total / $perPage)
-        ];
-    }
+  
 }

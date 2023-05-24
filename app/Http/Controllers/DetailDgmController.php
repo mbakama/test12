@@ -15,14 +15,44 @@ class DetailDgmController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    { 
+        // ce bout de code nous aide a restore une donnée a partir de l'idee fourni par l'utilisateur
+        // dans l'url vous pouvez ecrire comme params detailgdms?restore=1
+        if ($r = request('restore')) {
+       
+            $data = DetailDgm::withTrashed()->find($r); 
+            if ($data && $data->trashed()) {
+                $data->restore();
+    
+                return response()->json([
+                    'status' => 200,
+                    'message' =>
+                    'felicitation vous avez restoré un enregistrement'
+                ], 200);
+            } else {
+                if (isset($data->id)) {
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'cette donnée a été déja restorée'
+                    ], 500);
+                } else {
+                    return response()->json([
+                        'status' => 404,
+                        'message' => 'cet id n\'existe pas'
+                    ], 404);
+                }
+            }
+        }
+        // ce bout de code, nous permet de faire la pagination, le filtrage asc et desc et aussi recherche des donnees en mass ou par colonne
+        // dans l'url vous pouvez ecrire comme params detailgdms?page=1&sort=id,desc&by=STEPHANE ou 
+        // ou simplement detailgdms?page=1&sort=id,desc&Postnom=STEPHANE
         $query = DetailDgm::filter();
 
         if (count($query->get()) > 0) {
 
             return [
                 "nombre de données trouver" => count($query->get()),
-                "Donnees trouvées" => $query->paginate(10)
+                "Donnees trouvées" => $query->paginate(5)
             ];
         } else {
             return response()->json(
@@ -230,6 +260,48 @@ class DetailDgmController extends Controller
                     'message' => 'Desolé ! il parait que l\'id que vous voulez supprimer n\'existe pas'
                 ],
                 404
+            );
+        }
+    }
+ 
+    public function restorerAll()
+    {
+        // ce bout de code nous permet de restorer toutes les données qui ont été supprimés
+        $restores = DetailDgm::onlyTrashed();
+        //dabord on execute cette instruction pour verifier dans la base de donnee s'il y a des donnees effaces
+        if ($restores->count() > 0) {
+            $restores->restore();
+            return response()->json([
+                'status' => 200,
+                'message' => 'toutes les données supprimées ont été restorées'
+            ], 200);
+        } else {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'il se peut que vous ayez déja restoré toutes les données supprimées car nous n\'avons trouvé aucune donnée a restoré'
+                ],
+                404
+            );
+        }
+    }
+    public function all_data()
+    {
+        $query = DetailDgm::withTrashed()->get();
+
+        if ($query) {
+
+            return [
+                "Nombre de donnees trouvées" => count($query),
+                "Data" => DetailResource::collection($query)
+            ]
+            ;
+        } else {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'il y a une erreur'
+                ]
             );
         }
     }

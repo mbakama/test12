@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('reconveries', [detailLicenceController::class, 'restores']);
     Route::get('/all_data_licence', [detailLicenceController::class, 'all_data']);
-    Route::get('/reconvery/{id}', [detailLicenceController::class, 'restore']);
+
 
     // Routes addictionnelles pour les details de la FPI
 
@@ -46,8 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/detailfpi/{id}', [FpiController::class, 'update']);
     Route::delete('/detailfpi/{id}', [FpiController::class, 'destroy']);
 
-    Route::get('/reconverys', [FpiController::class, 'restorerAll']);
-    Route::get('/reconvery/{id}', [FpiController::class, 'restorer']);
+    Route::get('/reconverys', [FpiController::class, 'restorerAll']); 
     Route::get('/all_data_fpi', [FpiController::class, 'all_data']);
 
     //addictionnelles de route pour les donnees du Ministere du travail 
@@ -56,9 +55,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/fonction', [FonctionpublicController::class, 'store']);
     Route::get('/fonction/{id}', [FonctionpublicController::class, 'show']);
     Route::put('/fonction/{id}', [FonctionpublicController::class, 'update']);
-    Route::delete('/fonction/{id}', [FonctionpublicController::class, 'destroy']);
+    Route::delete('/fonction/{id}', [FonctionpublicController::class, 'destroy']); 
 
-    Route::get('/reconvery/{id}', [FonctionpublicController::class, 'restorer']);
     Route::get('/reconverys', [FonctionpublicController::class, 'restorerAll']);
     Route::get('/all_data_travail', [FonctionpublicController::class, 'all_data']);
 
@@ -68,7 +66,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/detaildgm',[DetailDGMController::class,'store']);
     Route::get('/detaildgm/{id}',[DetailDGMController::class,'show']);
     Route::match(['put', 'patch'],'/detaildgm/{id}',[DetailDGMController::class,'update']);
-    Route::delete('/detaildgm/{id}',[DetailDGMController::class,'destroy']);
+    Route::delete('/detaildgm/{id}',[DetailDGMController::class,'destroy']); 
+
+    Route::get('/reconverys_dgm', [DetailDGMController::class, 'restorerAll']);
+    Route::get('/all_data_dgm', [DetailDGMController::class, 'all_data']);
 
     Route::get('/tests',[TestController::class,'index']);
     Route::post('/test',[TestController::class,'store'])->name('test.store');
