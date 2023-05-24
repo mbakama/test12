@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
             if ($request->is("api/*")) {
                 return response()->json(
                     [
-                        "message"=>"la methode que tu evoque ne pas compatible avec cette route"
+                        "message"=>"la methode que tu fais appel, ne pas compatible avec cette route, verifie ton url et insere une bonne methode"
                     ],404
                 );
             }

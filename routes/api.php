@@ -4,6 +4,7 @@
 
 use App\Http\Controllers\DetailDGMController;
 use App\Http\Controllers\FonctionpublicController;
+use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FpiController;
@@ -66,8 +67,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/detaildgms',[ DetailDGMController::class, 'index']);
     Route::post('/detaildgm',[DetailDGMController::class,'store']);
     Route::get('/detaildgm/{id}',[DetailDGMController::class,'show']);
-    Route::patch('/detaildgm/{id}',[DetailDGMController::class,'update']);
+    Route::match(['put', 'patch'],'/detaildgm/{id}',[DetailDGMController::class,'update']);
     Route::delete('/detaildgm/{id}',[DetailDGMController::class,'destroy']);
+
+    Route::get('/tests',[TestController::class,'index']);
+    Route::post('/test',[TestController::class,'store'])->name('test.store');
 
 
     Route::get('/user', function (Request $request) {

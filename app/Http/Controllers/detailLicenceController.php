@@ -22,7 +22,7 @@ class detailLicenceController extends Controller
 
             return [
                 "nombre de données trouver" => count($query->get()),
-                "Donnees trouvées" => $query->get()
+                "Donnees trouvées" => $query->paginate(10)
             ];
         } else {
             return response()->json(

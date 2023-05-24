@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailDgm;
-use Illuminate\Http\Request;
-use App\Http\Requests\RequestDgm;
+use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\DetailResource;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +22,7 @@ class DetailDgmController extends Controller
 
             return [
                 "nombre de données trouver" => count($query->get()),
-                "Donnees trouvées" => $query->get()
+                "Donnees trouvées" => $query->paginate(10)
             ];
         } else {
             return response()->json(
@@ -215,7 +214,7 @@ class DetailDgmController extends Controller
         $delete = DetailDgm::find($id);
 
         if ($delete) {
-            $delete->detete();
+            $delete->delete();
 
             return response()->json(
                 [
