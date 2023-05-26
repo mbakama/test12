@@ -267,7 +267,7 @@ class FpiController extends Controller
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'l\'id que vous avez inseré n\'existe pas ou a été effacé'
+                    'message' => 'L\'id que vous avez inseré n\'existe pas ou a été effacé'
                 ],
                 404
             );
@@ -284,7 +284,7 @@ class FpiController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' =>
-                'felicitation vous avez restoré un enregistrement'
+                'Felicitation vous avez restoré un enregistrement'
             ], 200);
         } else {
             if (isset($restore->id)) {
@@ -295,7 +295,7 @@ class FpiController extends Controller
             }
             return response()->json([
                 'status' => 404,
-                'message' => 'cet id n\'existe pas'
+                'message' => 'L\'id que vous avez inseré n\'existe pas ou a été effacé'
             ], 404);
         }
     }

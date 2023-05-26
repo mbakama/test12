@@ -33,6 +33,9 @@ class FonctionpublicController extends Controller
         //         404
         //     );
         // } 
+        if ( $all_data = request("all_data")) {
+            return $all_data;
+        } 
 
         $query = Fonctionpublic::query(); 
         if ($s = request('search')) {
@@ -138,6 +141,8 @@ class FonctionpublicController extends Controller
                 }
             }
         }
+
+       
 
 
     }
@@ -431,23 +436,23 @@ class FonctionpublicController extends Controller
     }
     public function all_data()
     {
-        $query = Fonctionpublic::withTrashed()->get();
+        // $query = Fonctionpublic::withTrashed()->get();
 
-        if ($query) {
+        // if ($query) {
 
-            return [
-                "Nombre de donnees trouvées" => count($query),
-                "Data" => DetailResource::collection($query)
-            ]
-            ;
-        } else {
-            return response()->json(
-                [
-                    'status' => 404,
-                    'message' => 'il y a une erreur'
-                ]
-            );
-        }
+        //     return [
+        //         "Nombre de donnees trouvées" => count($query),
+        //         "Data" => DetailResource::collection($query)
+        //     ]
+        //     ;
+        // } else {
+        //     return response()->json(
+        //         [
+        //             'status' => 404,
+        //             'message' => 'il y a une erreur'
+        //         ]
+        //     );
+        // }
     }
   
 }
